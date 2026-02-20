@@ -2,18 +2,23 @@
 
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { format, formatDistance, isPast, isToday, parseISO } from "date-fns";
+import { enUS, ja } from "date-fns/locale";
+import type { Locale } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import DeleteReservation from "./DeleteReservation";
 import { useLanguage } from "./LanguageContext";
 import type { BookingListItem } from "../_lib/data-service";
 
-export const formatDistanceFromNow = (dateInput: Date | string) =>
+const dateFnsLocales: Record<string, Locale> = { en: enUS, ja };
+
+export const formatDistanceFromNow = (dateInput: Date | string, locale?: Locale) =>
 	formatDistance(
 		dateInput instanceof Date ? dateInput : parseISO(dateInput),
 		new Date(),
 		{
 			addSuffix: true,
+			locale,
 		}
 	).replace("about ", "");
 
@@ -30,7 +35,8 @@ interface ReservationCardProps {
  * @returns The reservation card as a JSX element
  */
 function ReservationCard({ booking, onDelete }: ReservationCardProps) {
-	const { t } = useLanguage();
+	const { t, language } = useLanguage();
+	const dateLocale = dateFnsLocales[language];
 	const {
 		id,
 		startDate,
@@ -82,11 +88,11 @@ function ReservationCard({ booking, onDelete }: ReservationCardProps) {
 				</div>
 
 				<p className="text-sm leading-relaxed text-primary-300 sm:text-base">
-					{format(startDateValue, "EEE, MMM dd yyyy")} (
+					{format(startDateValue, "EEE, MMM dd yyyy", { locale: dateLocale })} (
 					{isToday(startDateValue)
 						? t.reservationCard.today
-						: formatDistanceFromNow(startDateValue)}
-					) &mdash; {format(endDateValue, "EEE, MMM dd yyyy")}
+						: formatDistanceFromNow(startDateValue, dateLocale)}
+					) &mdash; {format(endDateValue, "EEE, MMM dd yyyy", { locale: dateLocale })}
 				</p>
 
 				<div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 text-sm sm:text-base">
@@ -100,7 +106,7 @@ function ReservationCard({ booking, onDelete }: ReservationCardProps) {
 							: t.reservationCard.guests.replace("{numGuests}", String(numGuests))}
 					</p>
 					<p className="ml-auto text-xs text-primary-400 sm:text-sm">
-						{t.reservationCard.booked.replace("{date}", format(createdAtValue, "EEE, MMM dd yyyy, p"))}
+						{t.reservationCard.booked.replace("{date}", format(createdAtValue, "EEE, MMM dd yyyy, p", { locale: dateLocale }))}
 					</p>
 				</div>
 			</div>
