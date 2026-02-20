@@ -26,6 +26,14 @@ vi.mock("../../app/_components/ReservationForm", () => ({
   default: () => <div>Reservation form</div>,
 }));
 
+vi.mock("../../app/_components/LoginMessage", () => ({
+  default: () => (
+    <div>
+      Please <a href="/login">login</a> to reserve this cabin
+    </div>
+  ),
+}));
+
 describe("Reservation", () => {
   beforeEach(() => {
     authMock.mockReset();

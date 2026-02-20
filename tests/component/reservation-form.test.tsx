@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithProviders } from "../helpers/render-with-providers";
 import type { DateRange } from "react-day-picker";
 import type { Cabin } from "@/types/domain";
 
@@ -60,7 +61,7 @@ async function renderForm() {
   const { default: ReservationForm } = await import(
     "../../app/_components/ReservationForm"
   );
-  return render(<ReservationForm cabin={baseCabin as Cabin} user={baseUser} />);
+  return renderWithProviders(<ReservationForm cabin={baseCabin as Cabin} user={baseUser} />);
 }
 
 describe("ReservationForm", () => {

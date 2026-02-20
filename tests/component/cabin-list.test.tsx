@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import CabinList from "../../app/_components/CabinList";
+import { renderWithProviders } from "../helpers/render-with-providers";
 import type { Cabin } from "@/types/domain";
 
 const { getCabinsMock } = vi.hoisted(() => ({
@@ -24,7 +25,7 @@ describe("CabinList", () => {
     getCabinsMock.mockResolvedValue([]);
 
     const ui = await CabinList({ filter: "all" });
-    const { container } = render(ui);
+    const { container } = renderWithProviders(ui);
 
     expect(container.firstChild).toBeNull();
   });
@@ -36,7 +37,7 @@ describe("CabinList", () => {
     ]);
 
     const ui = await CabinList({ filter: "all" });
-    render(ui);
+    renderWithProviders(ui);
 
     const headings = screen.getAllByRole("heading", { level: 3 });
     expect(headings.map((heading) => heading.textContent)).toEqual([
@@ -53,20 +54,20 @@ describe("CabinList", () => {
     ]);
 
     const smallUi = await CabinList({ filter: "small" });
-    const { unmount } = render(smallUi);
+    const { unmount } = renderWithProviders(smallUi);
     expect(screen.getByText("Cabin Tiny")).toBeInTheDocument();
     expect(screen.queryByText("Cabin Mid")).not.toBeInTheDocument();
 
     unmount();
 
-    const { unmount: unmountMedium } = render(
+    const { unmount: unmountMedium } = renderWithProviders(
       await CabinList({ filter: "medium" })
     );
     expect(screen.getByText("Cabin Mid")).toBeInTheDocument();
     expect(screen.queryByText("Cabin Big")).not.toBeInTheDocument();
     unmountMedium();
 
-    render(await CabinList({ filter: "large" }));
+    renderWithProviders(await CabinList({ filter: "large" }));
     expect(screen.getByText("Cabin Big")).toBeInTheDocument();
     expect(screen.queryByText("Cabin Tiny")).not.toBeInTheDocument();
   });

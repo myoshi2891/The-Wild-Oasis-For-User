@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import Cabin from "../../app/_components/Cabin";
+import { renderWithProviders } from "../helpers/render-with-providers";
 import type { Cabin as CabinType } from "@/types/domain";
 
 const cabin: CabinType = {
@@ -16,7 +17,7 @@ const cabin: CabinType = {
 
 describe("Cabin", () => {
   it("renders cabin details with an accessible image", () => {
-    render(<Cabin cabin={cabin} />);
+    renderWithProviders(<Cabin cabin={cabin} />);
 
     expect(
       screen.getByRole("img", { name: /cabin aspen/i })
