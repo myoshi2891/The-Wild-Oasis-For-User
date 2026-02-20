@@ -46,7 +46,7 @@ function ReservationCard({ booking, onDelete }: ReservationCardProps) {
 	const createdAtValue = new Date(created_at);
 
 	return (
-		<div className="flex flex-col overflow-hidden rounded-lg border border-primary-800 bg-primary-950 transition-transform duration-200 hover:-translate-y-0.5 sm:flex-row">
+		<div className="flex flex-col overflow-hidden rounded-lg border border-primary-800 bg-primary-950 motion-safe:transition-transform motion-safe:duration-200 motion-safe:hover:-translate-y-0.5 sm:flex-row">
 			<div className="relative h-52 w-full border-b border-primary-800 sm:h-auto sm:w-52 sm:border-b-0 sm:border-r md:w-60">
 				{image ? (
 					<Image

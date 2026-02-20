@@ -61,12 +61,12 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 			</button>
 
 			<nav className="hidden md:block">
-				<ul className="flex items-center gap-2 text-lg">
+				<ul className="flex items-center gap-4 text-lg">
 					{links.map((link) => (
 						<li key={link.href}>
 							<Link
 								href={link.href}
-								className="mr-2 transition-colors hover:text-accent-400"
+								className="transition-colors hover:text-accent-400"
 							>
 								{link.label}
 							</Link>
@@ -76,7 +76,7 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 						{session?.user?.image ? (
 							<Link
 								href="/account"
-								className="flex items-center gap-3 transition-colors hover:text-accent-400 mr-2"
+								className="flex items-center gap-3 transition-colors hover:text-accent-400"
 								onClick={closeMenu}
 							>
 								{" "}
@@ -93,7 +93,7 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 						) : (
 							<Link
 								href="/account"
-								className="transition-colors hover:text-accent-400 mr-2"
+								className="transition-colors hover:text-accent-400"
 								onClick={closeMenu}
 							>
 								{t.nav.guestArea}
