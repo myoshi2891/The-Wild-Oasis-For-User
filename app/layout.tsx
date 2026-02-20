@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import "@/app/_styles/globals.css";
 import Header from "./_components/Header";
 import { ReservationProvider } from "./_components/ReservationContext";
+import { LanguageProvider } from "./_components/LanguageContext";
 
 const josefin = localFont({
 	src: [
@@ -48,12 +49,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
 			<body
 				className={`${josefin.className} relative flex min-h-screen flex-col overflow-x-hidden bg-primary-950 text-primary-100 antialiased`}
 			>
-				<Header />
-				<div className="grid flex-1 px-4 py-12 sm:px-6 lg:px-8">
-					<main className="mx-auto w-full max-w-7xl">
-						<ReservationProvider>{children}</ReservationProvider>
-					</main>
-				</div>
+				<LanguageProvider>
+					<Header />
+					<div className="grid flex-1 px-4 py-12 sm:px-6 lg:px-8">
+						<main className="mx-auto w-full max-w-7xl">
+							<ReservationProvider>{children}</ReservationProvider>
+						</main>
+					</div>
+				</LanguageProvider>
 			</body>
 		</html>
 	);
