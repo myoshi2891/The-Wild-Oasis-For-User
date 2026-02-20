@@ -1,6 +1,7 @@
 import Cabin from "@/app/_components/Cabin";
 import Reservation from "@/app/_components/Reservation";
 import Spinner from "@/app/_components/Spinner";
+import ReserveHeader from "@/app/_components/ReserveHeader";
 import { getCabin, getCabins } from "@/app/_lib/data-service";
 import { Suspense } from "react";
 import type { Metadata } from "next";
@@ -63,9 +64,7 @@ export default async function Page({ params }: PageProps) {
 		<div className="mx-auto mt-6 max-w-6xl px-4 sm:mt-8 sm:px-6 lg:px-0">
 			<Cabin cabin={cabin} />
 			<div className="space-y-6 sm:space-y-8">
-				<h2 className="text-center text-3xl font-semibold text-accent-400 sm:text-4xl md:text-5xl">
-					Reserve {cabin.name} today. Pay on arrival.
-				</h2>
+				<ReserveHeader name={cabin.name} />
 				<Suspense fallback={<Spinner />}>
 					<Reservation cabin={cabin} />
 				</Suspense>

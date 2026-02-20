@@ -1,7 +1,10 @@
+"use client";
+
 import { UsersIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import type { CabinListItem } from "../_lib/data-service";
+import { useLanguage } from "./LanguageContext";
 
 interface CabinCardProps {
 	cabin: CabinListItem;
@@ -17,6 +20,7 @@ interface CabinCardProps {
  * @param cabin - Cabin data used to populate the card (expects `id`, `name`, `maxCapacity`, `regularPrice`, `discount`, and `image`)
  */
 function CabinCard({ cabin }: CabinCardProps) {
+	const { t } = useLanguage();
 	const { id, name, maxCapacity, regularPrice, discount, image } = cabin;
 
 	return (
@@ -41,8 +45,9 @@ function CabinCard({ cabin }: CabinCardProps) {
 						<div className="flex items-center gap-3">
 							<UsersIcon className="h-5 w-5 text-primary-600" />
 							<p className="text-sm sm:text-base">
-								For up to <span className="font-semibold">{maxCapacity}</span>{" "}
-								guests
+								{t.cabinDetails.capacity.split('{maxCapacity}').map((part, i, arr) => (
+									i < arr.length - 1 ? <>{part}<span className="font-semibold">{maxCapacity}</span></> : part
+								))}
 							</p>
 						</div>
 
@@ -61,7 +66,7 @@ function CabinCard({ cabin }: CabinCardProps) {
 									${regularPrice}
 								</span>
 							)}
-							<span className="text-sm text-primary-300">/ night</span>
+							<span className="text-sm text-primary-300">{t.dateSelector.perNight}</span>
 						</div>
 					</div>
 				</div>
@@ -71,7 +76,7 @@ function CabinCard({ cabin }: CabinCardProps) {
 						href={`/cabins/${id}`}
 						className="block px-6 py-4 font-semibold transition-colors duration-150 hover:bg-accent-600 hover:text-primary-900 sm:inline-block sm:border-l sm:border-primary-800 sm:px-6"
 					>
-						Details & reservation &rarr;
+						{t.cabinCard.detailsBtn}
 					</Link>
 				</div>
 			</div>

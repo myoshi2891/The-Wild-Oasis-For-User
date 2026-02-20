@@ -1,3 +1,5 @@
+"use client";
+
 import TextExpander from "@/app/_components/TextExpander";
 import {
 	EyeSlashIcon,
@@ -5,6 +7,7 @@ import {
 	UsersIcon,
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import { useLanguage } from "./LanguageContext";
 
 interface CabinData {
 	name: string;
@@ -24,9 +27,11 @@ interface CabinProps {
  * @returns The JSX markup for a cabin card populated with the given data.
  */
 function Cabin({ cabin }: CabinProps) {
+	const { t } = useLanguage();
 	const { name, maxCapacity, image, description } = cabin;
 	const imageSrc = image ?? "/placeholder-cabin.png";
-	const descriptionText = description ?? "";
+	const translatedDesc = t.cabinDescriptions?.[name as keyof typeof t.cabinDescriptions];
+	const descriptionText = translatedDesc ?? description ?? "";
 
 	return (
 		<div className="mx-auto mb-24 grid w-full max-w-3xl gap-10 rounded-lg border border-primary-800 px-4 py-6 sm:px-6 lg:max-w-6xl lg:grid-cols-[3fr_2fr] lg:items-center lg:gap-16 lg:px-12 lg:py-10">
@@ -55,20 +60,23 @@ function Cabin({ cabin }: CabinProps) {
 					<li className="flex items-center gap-3">
 						<UsersIcon className="h-5 w-5 text-primary-600" />
 						<span className="text-lg">
-							For up to <span className="font-bold">{maxCapacity}</span> guests
+							{t.cabinDetails.capacity.replace("{maxCapacity}", maxCapacity.toString())}
 						</span>
 					</li>
 					<li className="flex items-center gap-3">
 						<MapPinIcon className="h-5 w-5 text-primary-600" />
 						<span className="text-lg">
-							Located in the heart of the{" "}
-							<span className="font-bold">Dolomites</span> (Italy)
+							{t.cabinDetails.location.split('Dolomites').map((part, i, arr) => (
+								i < arr.length - 1 ? <>{part}<span className="font-bold">Dolomites</span></> : part
+							))}
 						</span>
 					</li>
 					<li className="flex items-center gap-3">
 						<EyeSlashIcon className="h-5 w-5 text-primary-600" />
 						<span className="text-lg">
-							Privacy <span className="font-bold">100%</span> guaranteed
+							{t.cabinDetails.privacy.split('100%').map((part, i, arr) => (
+								i < arr.length - 1 ? <>{part}<span className="font-bold">100%</span></> : part
+							))}
 						</span>
 					</li>
 				</ul>
