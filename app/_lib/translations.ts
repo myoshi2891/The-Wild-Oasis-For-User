@@ -23,8 +23,8 @@ export const translations = {
       title: "Our Luxury Cabins",
       description: "Cozy yet luxurious cabins, located right in the heart of the Italian Dolomites. Imagine waking up to beautiful mountain views, spending your days exploring the dark forests around, or just relaxing in your private hot tub under the stars. Enjoy nature's beauty in your own little home away from home. The perfect spot for a peaceful, calm vacation. Welcome to paradise."
     },
-    common: {
-      toggleLang: "JA",
+    warning: {
+      portfolioDisclaimer: "This website is a portfolio project and is not actively operated. We do not take any responsibility for the handling of personal information or provided data.",
     }
   },
   ja: {
@@ -53,6 +53,9 @@ export const translations = {
     },
     common: {
       toggleLang: "EN",
+    },
+    warning: {
+      portfolioDisclaimer: "※注意: このサイトはポートフォリオ用のデモサイトであり、実際に運用されているサービスではありません。入力された個人情報等の取り扱いに関しては一切の責任を負いかねますのでご了承ください。",
     }
   }
 } as const;
