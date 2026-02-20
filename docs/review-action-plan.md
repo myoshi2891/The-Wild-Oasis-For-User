@@ -45,19 +45,19 @@ WHERE b1.status <> 'canceled'
 
 ---
 
-### 1.2 booking.js 末尾改行追加
+### 1.2 booking.ts 末尾改行追加
 
-**対象ファイル**: `app/_lib/booking.js`
+**対象ファイル**: `app/_lib/booking.ts`
 
 **作業内容**:
 ```bash
 # 末尾に改行を追加
-echo "" >> app/_lib/booking.js
+echo "" >> app/_lib/booking.ts
 ```
 
 **確認コマンド**:
 ```bash
-tail -c 1 app/_lib/booking.js | od -c
+tail -c 1 app/_lib/booking.ts | od -c
 # 期待値: 0000000  \n
 ```
 
@@ -67,14 +67,14 @@ tail -c 1 app/_lib/booking.js | od -c
 
 ### 2.1 SQLSTATEからHTTPへのマッピング実装
 
-**対象ファイル**: `app/_lib/actions.js`
+**対象ファイル**: `app/_lib/actions.ts`
 
-**新規作成ファイル**: `app/_lib/errors.js`
+**新規作成ファイル**: `app/_lib/errors.ts`
 
 **実装内容**:
 
 ```javascript
-// app/_lib/errors.js
+// app/_lib/errors.ts
 
 export class BookingError extends Error {
   constructor(message, statusCode = 500, code = null) {
@@ -127,7 +127,7 @@ export function mapSupabaseError(error) {
 }
 ```
 
-**actions.js への適用例**:
+**actions.ts への適用例**:
 
 ```javascript
 import { mapSupabaseError } from './errors';
@@ -143,7 +143,7 @@ if (error) {
 
 ### 2.2 SignOutButton の実装確認
 
-**確認対象**: `app/_components/SignOutButton.jsx`
+**確認対象**: `app/_components/SignOutButton.tsx`
 
 **確認ポイント**:
 - `next-auth/react` の `signOut` を使用しているか
@@ -279,7 +279,7 @@ supabase db push
 
 ### 5.1 nationalId 正規化の仕様明文化
 
-**対象ファイル**: `app/_lib/guest.js` のJSDocを拡充
+**対象ファイル**: `app/_lib/guest.ts` のJSDocを拡充
 
 ```javascript
 /**
@@ -294,7 +294,7 @@ supabase db push
  */
 ```
 
-### 5.2 data-service.js の cache フォールバックにコメント追加
+### 5.2 data-service.ts の cache フォールバックにコメント追加
 
 ```javascript
 /**
@@ -329,7 +329,7 @@ const cacheFn = typeof cache === "function" ? cache : (fn) => fn;
 | Phase | 期間 | 担当 | 状態 |
 |-------|------|------|------|
 | 1.1 DB調査・判断 | Day 1 | Tech Lead | ✅ |
-| 1.2 booking.js 改行 | Day 1 | Any | ✅ |
+| 1.2 booking.ts 改行 | Day 1 | Any | ✅ |
 | 2.1 エラーマッピング | Day 2-4 | Backend | ✅ |
 | 2.2 SignOutButton確認 | Day 2 | Frontend | ✅ |
 | 3.1 CI E2E追加 | Day 5-6 | DevOps | ✅ |

@@ -62,7 +62,7 @@
 
 | カテゴリ | コンポーネント | 役割 |
 |---------|---------------|------|
-| Layout | Header, Navigation, Logo, SideNavigation | ナビゲーション・レイアウト |
+| Layout | Header, Navigation, Logo, SideNavigation, HeroClient | ナビゲーション・レイアウト |
 | Auth | SignInButton, SignOutButton, LoginMessage | 認証UI |
 | Cabin | CabinList, CabinCard, Cabin, Filter | キャビン表示 |
 | Reservation | Reservation, ReservationForm, ReservationCard, ReservationList | 予約UI |
