@@ -20,16 +20,16 @@ export default function AboutContent({ cabinsCount }: AboutContentProps) {
         <div className="space-y-8">
           <p>{t.about.p1_1}</p>
           <p>
-            {t.about.p1_2.replace("{count}", cabinsCount.toString())}
+            {t.about.p1_2.replaceAll("{count}", cabinsCount.toString())}
           </p>
           <p>{t.about.p1_3}</p>
         </div>
       </div>
 
       <div className="md:col-span-3 md:col-start-1">
-        <h1 className="mb-10 text-4xl font-medium text-accent-400">
+        <h2 className="mb-10 text-4xl font-medium text-accent-400">
           {t.about.title2}
-        </h1>
+        </h2>
 
         <div className="space-y-8">
           <p>{t.about.p2_1}</p>

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback, useMemo } from "react";
 import { translations, Language } from "../_lib/translations";
 
 type LanguageContextType = {
@@ -11,34 +11,46 @@ type LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+function isValidLanguage(lang: string | null): lang is Language {
+  return lang === "en" || lang === "ja";
+}
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("en");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     // Client-side only: check local storage for saved language preference
-    const savedLang = localStorage.getItem("app-language") as Language;
-    if (savedLang === "en" || savedLang === "ja") {
-      setLanguage(savedLang);
+    const rawLang = localStorage.getItem("app-language");
+    if (isValidLanguage(rawLang)) {
+      setLanguage(rawLang);
+      document.documentElement.lang = rawLang;
+    } else {
+      document.documentElement.lang = "en";
     }
     setMounted(true);
   }, []);
 
-  const toggleLanguage = () => {
-    const nextLang = language === "en" ? "ja" : "en";
-    setLanguage(nextLang);
-    localStorage.setItem("app-language", nextLang);
-  };
+  const toggleLanguage = useCallback(() => {
+    setLanguage((prevLang) => {
+      const nextLang = prevLang === "en" ? "ja" : "en";
+      localStorage.setItem("app-language", nextLang);
+      if (typeof document !== "undefined") {
+        document.documentElement.lang = nextLang;
+      }
+      return nextLang;
+    });
+  }, []);
 
   // Prevent hydration mismatch by returning empty/default on server, 
   // but for SEO it's better to just render the default language until mounted.
   // We'll render default 'en' during SSR, and swap if needed on mount.
   
-  const value = {
+  const value = useMemo(() => ({
     language: mounted ? language : "en",
     t: mounted ? translations[language] : translations["en"],
     toggleLanguage,
-  };
+  }), [mounted, language, toggleLanguage]);
 
   return (
     <LanguageContext.Provider value={value}>
