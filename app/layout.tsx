@@ -38,11 +38,11 @@ interface RootLayoutProps {
 }
 
 /**
- * Defines the root application layout and provides the reservation context to all pages.
+ * Defines the application's root HTML layout and provides top-level providers and chrome.
  *
- * Renders the HTML and body structure, global styling and font classes, the site Header, and a centered main container where `children` are wrapped with `ReservationProvider`.
+ * Renders the <html> and <body> structure with global font and styling, wraps content with LanguageProvider, displays the DisclaimerBanner and Header, and scopes `children` with ReservationProvider inside the main content area.
  *
- * @returns The top-level JSX layout element containing the app chrome and the reservation-scoped children.
+ * @returns The top-level JSX element representing the application's root HTML structure and wrapped children.
  */
 export default function RootLayout({ children }: RootLayoutProps) {
 	// TODO: Cookie ベースの言語設定に移行し、サーバー側で動的に lang を設定する。

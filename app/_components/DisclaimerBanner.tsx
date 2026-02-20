@@ -2,6 +2,13 @@
 
 import { useLanguage } from "./LanguageContext";
 
+/**
+ * Renders a responsive, full-width disclaimer banner showing a portfolio warning message.
+ *
+ * Displays the localized `t.warning.portfolioDisclaimer` when available; otherwise falls back to a built-in default disclaimer. The banner is styled for a fixed bottom position on small screens and static placement on larger screens.
+ *
+ * @returns A JSX element containing the styled disclaimer banner.
+ */
 export default function DisclaimerBanner() {
   const { t } = useLanguage();
 

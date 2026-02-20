@@ -3,6 +3,11 @@
 import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
 
+/**
+ * Render the hero section with a localized title and call-to-action linking to `/cabins`.
+ *
+ * @returns JSX element containing a centered hero: a CTA Link populated from `t.home.cta` and a heading populated from `t.home.title`.
+ */
 export default function HeroClient() {
 	const { t } = useLanguage();
 

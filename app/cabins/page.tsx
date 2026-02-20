@@ -23,12 +23,12 @@ interface PageProps {
 }
 
 /**
- * Renders the Cabins page with header text, filter controls, and a list of cabins.
+ * Renders the Cabins page with header, filter controls, a filtered cabin list, and a reservation reminder.
  *
- * Derives the active filter from `searchParams.capacity` (defaults to `"all"`) and passes it to the cabin list.
+ * Constrains the `capacity` query parameter to the valid filter values and falls back to `"all"` when missing or invalid.
  *
- * @param searchParams - A promise that resolves to route query parameters; may include `capacity` to control which cabins are shown
- * @returns The page JSX containing the header, filter UI, and a cabin list filtered by the derived capacity
+ * @param searchParams - Route query parameters; may include `capacity` to select which cabins are shown
+ * @returns The JSX element for the Cabins page
  */
 export default async function Page({ searchParams }: PageProps) {
 	const params = await searchParams;
