@@ -45,6 +45,7 @@
   .cabin-grid > *:nth-child(4) { animation-delay: 0.21s; }
   .cabin-grid > *:nth-child(5) { animation-delay: 0.28s; }
   .cabin-grid > *:nth-child(6) { animation-delay: 0.35s; }
+  .cabin-grid > *:nth-child(n+7) { animation-delay: 0.35s; }
 
   /* ── Reservation list stagger ─────────────────────── */
   .reservation-list > * {

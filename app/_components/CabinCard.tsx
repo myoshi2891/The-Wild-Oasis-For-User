@@ -24,13 +24,13 @@ function CabinCard({ cabin }: CabinCardProps) {
 	const { id, name, maxCapacity, regularPrice, discount, image } = cabin;
 
 	return (
-		<div className="group flex flex-col overflow-hidden border border-primary-800 transition-[transform,box-shadow] duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-primary-900/60">
+		<div className="group flex flex-col overflow-hidden border border-primary-800 motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:hover:-translate-y-1.5 hover:shadow-lg hover:shadow-primary-900/60">
 			<div className="relative h-52 w-full overflow-hidden sm:h-60">
 				<Image
 					src={image ?? "/placeholder-cabin.png"}
 					fill
 					alt={t.cabinDetails.cabinHeading.replace("{name}", name)}
-					className="object-cover transition-transform duration-500 group-hover:scale-105"
+					className="object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
 					sizes="(min-width: 1280px) 380px, (min-width: 768px) 50vw, 100vw"
 				/>
 			</div>
