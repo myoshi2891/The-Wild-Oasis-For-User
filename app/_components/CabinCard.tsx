@@ -20,13 +20,13 @@ function CabinCard({ cabin }: CabinCardProps) {
 	const { id, name, maxCapacity, regularPrice, discount, image } = cabin;
 
 	return (
-		<div className="flex flex-col overflow-hidden border border-primary-800 sm:flex-row">
-			<div className="relative h-56 w-full sm:h-auto sm:min-h-full sm:w-1/2">
+		<div className="group flex flex-col overflow-hidden border border-primary-800 transition-[transform,box-shadow] duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-primary-900/60 sm:flex-row">
+			<div className="relative h-56 w-full overflow-hidden sm:h-auto sm:min-h-full sm:w-1/2">
 				<Image
 					src={image ?? "/placeholder-cabin.png"}
 					fill
 					alt={`Cabin ${name}`}
-					className="object-cover sm:border-r sm:border-primary-800"
+					className="object-cover transition-transform duration-500 group-hover:scale-105 sm:border-r sm:border-primary-800"
 					sizes="(min-width: 1280px) 340px, (min-width: 640px) 50vw, 100vw"
 				/>
 			</div>

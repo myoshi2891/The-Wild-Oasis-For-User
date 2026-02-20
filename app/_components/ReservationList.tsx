@@ -36,13 +36,11 @@ function ReservationList({ bookings }: ReservationListProps) {
 	}
 
 	return (
-		<ul className="space-y-6">
+		<ul className="reservation-list space-y-6">
 			{optimisticBookings.map((booking) => (
-				<ReservationCard
-					onDelete={handleDelete}
-					booking={booking}
-					key={booking.id}
-				/>
+				<li key={booking.id}>
+					<ReservationCard onDelete={handleDelete} booking={booking} />
+				</li>
 			))}
 		</ul>
 	);

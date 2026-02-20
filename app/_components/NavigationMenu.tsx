@@ -102,7 +102,7 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 			{isOpen ? (
 				<div
 					id="mobile-navigation-menu"
-					className="absolute left-0 top-12 z-20 w-72 rounded-md border border-primary-800 bg-primary-950 p-2 opacity-80 shadow-lg md:hidden"
+					className="animate-slide-down absolute left-0 top-12 z-20 w-72 rounded-md border border-primary-800 bg-primary-950 p-2 opacity-80 shadow-lg md:hidden"
 				>
 					<nav>
 						<ul className="flex flex-col items-center gap-3 text-base">
