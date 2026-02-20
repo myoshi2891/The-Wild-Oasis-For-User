@@ -41,7 +41,7 @@ function Cabin({ cabin }: CabinProps) {
 					fill
 					sizes="(min-width: 1024px) 45vw, (min-width: 640px) 70vw, 100vw"
 					className="object-cover"
-					alt={`Cabin ${name}`}
+					alt={t.cabinDetails.cabinHeading.replace("{name}", name)}
 					loading="eager"
 					fetchPriority="high"
 				/>
@@ -49,7 +49,7 @@ function Cabin({ cabin }: CabinProps) {
 
 			<div className="z-10 lg:pl-10">
 				<h3 className="mb-5 bg-primary-950 px-4 py-2 text-4xl font-black text-accent-100 sm:text-5xl md:text-6xl lg:-translate-x-8 lg:px-6 lg:pb-1 lg:text-7xl xl:translate-x-0">
-					Cabin {name}
+					{t.cabinDetails.cabinHeading.replace("{name}", name)}
 				</h3>
 
 				<p className="mb-8 text-base text-primary-300 sm:text-lg md:mb-10">
@@ -66,17 +66,17 @@ function Cabin({ cabin }: CabinProps) {
 					<li className="flex items-center gap-3">
 						<MapPinIcon className="h-5 w-5 text-primary-600" />
 						<span className="text-lg">
-							{t.cabinDetails.location.split('Dolomites').map((part, i, arr) => (
-								i < arr.length - 1 ? <>{part}<span className="font-bold">Dolomites</span></> : part
-							))}
+							{t.cabinDetails.location.split('**').map((part, i) =>
+								i % 2 === 1 ? <span key={i} className="font-bold">{part}</span> : <span key={i}>{part}</span>
+							)}
 						</span>
 					</li>
 					<li className="flex items-center gap-3">
 						<EyeSlashIcon className="h-5 w-5 text-primary-600" />
 						<span className="text-lg">
-							{t.cabinDetails.privacy.split('100%').map((part, i, arr) => (
-								i < arr.length - 1 ? <>{part}<span className="font-bold">100%</span></> : part
-							))}
+							{t.cabinDetails.privacy.split('**').map((part, i) =>
+								i % 2 === 1 ? <span key={i} className="font-bold">{part}</span> : <span key={i}>{part}</span>
+							)}
 						</span>
 					</li>
 				</ul>

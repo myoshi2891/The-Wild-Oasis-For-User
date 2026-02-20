@@ -25,15 +25,17 @@ export const translations = {
     },
     common: {
       toggleLang: "JP",
+      toggleLangLabel: "Switch to Japanese",
     },
     warning: {
       portfolioDisclaimer: "This website is a portfolio project and is not actively operated. We do not take any responsibility for the handling of personal information or provided data.",
     },
     cabinDetails: {
+      cabinHeading: "Cabin {name}",
       reserveHeading: "Reserve {name} today. Pay on arrival.",
       capacity: "For up to {maxCapacity} guests",
-      location: "Located in the heart of the Dolomites (Italy)",
-      privacy: "Privacy 100% guaranteed"
+      location: "Located in the heart of the **Dolomites** (Italy)",
+      privacy: "Privacy **100%** guaranteed"
     },
     reservationForm: {
       loggedInAs: "Logged in as",
@@ -60,7 +62,8 @@ export const translations = {
       manageLink: "Manage your reservations \u2192"
     },
     cabinCard: {
-      detailsBtn: "Details & reservation \u2192"
+      detailsBtn: "Details & reservation \u2192",
+      perNight: "/night",
     },
     cabinDescriptions: {
       "001": "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
@@ -99,15 +102,17 @@ export const translations = {
     },
     common: {
       toggleLang: "EN",
+      toggleLangLabel: "英語に切り替え",
     },
     warning: {
       portfolioDisclaimer: "※注意: このサイトはポートフォリオ用のデモサイトであり、実際に運用されているサービスではありません。入力された個人情報等の取り扱いに関しては一切の責任を負いかねますのでご了承ください。",
     },
     cabinDetails: {
+      cabinHeading: "キャビン {name}",
       reserveHeading: "今日 {name} を予約する。支払いは現地で。",
       capacity: "最大 {maxCapacity} 名様まで",
-      location: "イタリア・ドロミテの中心に位置",
-      privacy: "プライバシー 100% 保証"
+      location: "イタリア・**ドロミテ**の中心に位置",
+      privacy: "プライバシー **100%** 保証"
     },
     reservationForm: {
       loggedInAs: "ログイン中",
@@ -134,7 +139,8 @@ export const translations = {
       manageLink: "予約を管理する \u2192"
     },
     cabinCard: {
-      detailsBtn: "詳細と予約 \u2192"
+      detailsBtn: "詳細と予約 \u2192",
+      perNight: "/泊",
     },
     cabinDescriptions: {
       "001": "カップルに最適な、究極のラグジュアリー空間をご堪能いただける居心地の良い木造キャビン 001。絵のように美しい森に囲まれたこの見事なキャビンは、誰にも邪魔されないプライベートな隠れ家をお約束します。モダンで高品質な木材を使ったインテリア、快適なシーティングエリア、暖炉、そして設備の整ったキッチンをご用意。上質なリネンに包まれた豪華なキングサイズベッドで、安らかな眠りをお楽しみください。スパのようなシャワールームや、露天風呂（ホットタブ）付きのプライベートデッキで心ゆくまでリラックスしていただけます。",

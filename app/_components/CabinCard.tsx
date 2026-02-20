@@ -29,7 +29,7 @@ function CabinCard({ cabin }: CabinCardProps) {
 				<Image
 					src={image ?? "/placeholder-cabin.png"}
 					fill
-					alt={`Cabin ${name}`}
+					alt={t.cabinDetails.cabinHeading.replace("{name}", name)}
 					className="object-cover transition-transform duration-500 group-hover:scale-105"
 					sizes="(min-width: 1280px) 380px, (min-width: 768px) 50vw, 100vw"
 				/>
@@ -38,7 +38,7 @@ function CabinCard({ cabin }: CabinCardProps) {
 			<div className="flex flex-1 flex-col bg-primary-950">
 				<div className="px-5 py-5 sm:px-6 sm:py-6">
 					<h3 className="text-2xl font-semibold text-accent-500">
-						Cabin {name}
+						{t.cabinDetails.cabinHeading.replace("{name}", name)}
 					</h3>
 
 					<div className="mt-4 flex items-center justify-between gap-4 text-primary-200">
@@ -74,7 +74,7 @@ function CabinCard({ cabin }: CabinCardProps) {
 								</span>
 							)}
 							<span className="text-sm text-primary-300">
-								{t.dateSelector.perNight}
+								{t.cabinCard.perNight}
 							</span>
 						</div>
 					</div>
