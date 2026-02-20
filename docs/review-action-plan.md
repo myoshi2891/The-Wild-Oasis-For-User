@@ -328,39 +328,39 @@ const cacheFn = typeof cache === "function" ? cache : (fn) => fn;
 
 | Phase | 期間 | 担当 | 状態 |
 |-------|------|------|------|
-| 1.1 DB調査・判断 | Day 1 | Tech Lead | ⬜ |
-| 1.2 booking.js 改行 | Day 1 | Any | ⬜ |
-| 2.1 エラーマッピング | Day 2-4 | Backend | ⬜ |
-| 2.2 SignOutButton確認 | Day 2 | Frontend | ⬜ |
-| 3.1 CI E2E追加 | Day 5-6 | DevOps | ⬜ |
-| 4.x DB制約実装 | Day 7-12 | Backend/DBA | ⬜ |
-| 5.x ドキュメント | Day 13-14 | Any | ⬜ |
+| 1.1 DB調査・判断 | Day 1 | Tech Lead | ✅ |
+| 1.2 booking.js 改行 | Day 1 | Any | ✅ |
+| 2.1 エラーマッピング | Day 2-4 | Backend | ✅ |
+| 2.2 SignOutButton確認 | Day 2 | Frontend | ✅ |
+| 3.1 CI E2E追加 | Day 5-6 | DevOps | ✅ |
+| 4.x DB制約実装 | Day 7-12 | Backend/DBA | ✅ |
+| 5.x ドキュメント | Day 13-14 | Any | ✅ |
 
 ---
 
 ## チェックリスト
 
 ### Phase 1 完了条件
-- [ ] DB型・status実値を確認した
-- [ ] 既存データに重複がないことを確認した
-- [ ] Option A/B の判断を下した
-- [ ] booking.js の末尾改行を追加した
+- [x] DB型・status実値を確認した
+- [x] 既存データに重複がないことを確認した
+- [x] Option A/B の判断を下した（Option A: DB制約実装を選択）
+- [x] booking.ts の末尾改行を追加した
 
 ### Phase 2 完了条件
-- [ ] `app/_lib/errors.js` を作成した
-- [ ] actions.js でエラーマッピングを使用している
-- [ ] SignOutButton が正しく動作する
+- [x] `app/_lib/errors.ts` を作成した
+- [x] actions.ts でエラーマッピングを使用している
+- [x] SignOutButton が正しく動作する
 
 ### Phase 3 完了条件
-- [ ] CI で E2E テストが実行される
-- [ ] テスト失敗時にレポートがアップロードされる
+- [x] CI で E2E テストが実行される
+- [x] テスト失敗時にレポートがアップロードされる
 
-### Phase 4 完了条件（Option A選択時）
-- [ ] マイグレーションファイルが作成された
-- [ ] ローカルで制約違反テストが通る
-- [ ] ステージング環境でデプロイ確認
-- [ ] 本番適用
+### Phase 4 完了条件（Option A選択）
+- [x] マイグレーションファイルが作成された
+- [x] ローカルで制約違反テストが通る
+- [x] ステージング環境でデプロイ確認
+- [x] 本番適用
 
 ### Phase 5 完了条件
-- [x] guest.js のJSDocが拡充された
-- [x] data-service.js のコメントが追加された
+- [x] guest.ts のJSDocが拡充された
+- [x] data-service.ts のコメントが追加された

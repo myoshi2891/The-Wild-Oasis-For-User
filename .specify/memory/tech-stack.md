@@ -16,7 +16,7 @@
 |------|-----|------|
 | App Router | ✅ | `app/` ディレクトリ |
 | Server Components | ✅ | デフォルト |
-| Server Actions | ✅ | `actions.js` |
+| Server Actions | ✅ | `actions.ts` |
 | ISR | ✅ | `revalidate = 3600` |
 | Middleware | ✅ | 認証保護 |
 | Image Optimization | ✅ | `next/image` |
@@ -101,7 +101,7 @@ CREATE TABLE settings (
 ### 認証設定
 
 ```javascript
-// app/_lib/auth.js
+// app/_lib/auth.ts
 export const authOptions = {
   providers: [
     GoogleProvider({
@@ -148,7 +148,7 @@ colors: {
 ### フォント
 
 ```javascript
-// app/layout.jsx
+// app/layout.tsx
 import localFont from "next/font/local";
 
 const josefinSans = localFont({
@@ -263,11 +263,11 @@ jobs:
       matrix:
         node: [20, 22]
     steps:
-      - npm ci
-      - npm run lint
-      - npm run test:unit
-      - npm run test:component
-      - SKIP_SSG=true npm run build
+      - bun install
+      - bun run lint
+      - bun run test:unit
+      - bun run test:component
+      - SKIP_SSG=true bun run build
       - curl /api/health (スモークテスト)
 ```
 
@@ -294,16 +294,21 @@ jobs:
 | `PLAYWRIGHT_BASE_URL` | E2Eテスト用URL |
 | `TZ` | タイムゾーン |
 
-## 移行予定
+## 移行状況
 
 ### TypeScript 移行
 
 - 計画書: `typescript-migration-plan.md`
-- ステータス: 未着手
-- 優先度: 中
+- ステータス: **完了**（Phase 6、2025-12-31）
 
 ### npm → Bun 移行
 
 - 計画書: `npm-to-bun-migration-plan.md`
+- ステータス: **完了**（2026-01-01）
+
+### サーバーサイド i18n
+
 - ステータス: 未着手
-- 優先度: 低
+- 優先度: 中
+- 候補: next-intl, next-i18next
+- 現状: クライアントサイド Context ベースで日英2言語対応済み

@@ -1,6 +1,6 @@
 # 仕様書インデックス
 
-> 更新履歴: 2025-12-24 初版策定、2025-12-31 TypeScript Phase 6 完了、2026-01-01 specs/002 全タスク完了・004/005 完了
+> 更新履歴: 2025-12-24 初版策定、2025-12-31 TypeScript Phase 6 完了、2026-01-01 specs/002 全タスク完了・004/005 完了、2026-02-20 specs/006 i18n 完了
 
 このディレクトリには、機能ごとの仕様書 (spec/plan/tasks) を管理します。
 
@@ -22,6 +22,7 @@
 | 003 | [typescript-migration](../typescript-migration-plan.md) | **完了** | JSからTSへの段階的移行 |
 | 004 | [npm-to-bun](004-npm-to-bun/) | **完了** | npmからBunへの移行 |
 | 005 | [structured-logging](005-structured-logging/) | **完了** | 409 Conflict の構造化ログ導入 |
+| 006 | [i18n-client-side](006-i18n-client-side/) | **完了** | クライアントサイド日英翻訳 |
 
 ## 詳細
 
@@ -120,9 +121,29 @@
   }
   ```
 
+### 006: クライアントサイド i18n (日英翻訳)
+
+- **目的**: 日本語・英語の2言語対応（クライアントサイド Context ベース）
+- **現在のステータス**: **完了**（2026-02-20）
+- **ファイル**:
+  - [spec.md](006-i18n-client-side/spec.md)
+  - [plan.md](006-i18n-client-side/plan.md)
+  - [tasks.md](006-i18n-client-side/tasks.md)
+- **主要ファイル**:
+  - `app/_lib/translations.ts` — 翻訳辞書（en/ja 全キー）
+  - `app/_components/LanguageContext.tsx` — LanguageProvider / useLanguage
+  - `app/_components/LanguageToggle.tsx` — 言語切替ボタン
+  - `tests/helpers/render-with-providers.tsx` — テスト用ラッパー
+- **アーキテクチャ上の制約**:
+  - i18n はクライアント Context 依存 → 翻訳対象コンポーネントは `"use client"` 必須
+  - Server Component（`reservations/page.tsx` 等）は翻訳スコープ外
+  - 将来サーバーサイド i18n（next-intl 等）移行時に `"use client"` を除去予定
+- **翻訳カバレッジ**:
+  - nav, home, about, cabins, cabinDetails, cabinCard, dateSelector, loginPrompt, reservationForm, reservationCard, thankYou, common, warning
+
 ## 今後追加予定
 
-現在、新規仕様の追加予定はありません。
+- サーバーサイド i18n 移行（next-intl 等）— `"use client"` 依存の解消
 
 ## テンプレート
 
