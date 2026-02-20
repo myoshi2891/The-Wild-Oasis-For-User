@@ -51,10 +51,10 @@ export async function generateStaticParams(): Promise<PageParams[]> {
 }
 
 /**
- * Render the cabin detail page for the cabin identified by `params.cabinId`.
+ * Render the cabin detail page for the route's `cabinId`.
  *
- * @param params - A promise that resolves to the route parameters object containing `cabinId`
- * @returns The React element containing the cabin details, a reservation heading, and the reservation UI (the reservation form is rendered inside a Suspense boundary)
+ * @param params - A promise resolving to the route parameters object containing `cabinId`
+ * @returns A React element rendering the cabin details, a reservation header, and the reservation UI
  */
 export default async function Page({ params }: PageProps) {
 	const { cabinId } = await params;

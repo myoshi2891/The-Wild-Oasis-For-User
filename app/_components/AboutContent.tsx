@@ -7,6 +7,14 @@ interface AboutContentProps {
   cabinsCount: number;
 }
 
+/**
+ * Render the localized About section content.
+ *
+ * Renders two content columns using translations from the language context, inserts `cabinsCount` into the first column's second paragraph (`t.about.p1_2`), and includes a call-to-action link to `/cabins`.
+ *
+ * @param cabinsCount - Number of cabins to substitute into the localized paragraph `t.about.p1_2`
+ * @returns A React element containing the About content
+ */
 export default function AboutContent({ cabinsCount }: AboutContentProps) {
   const { t } = useLanguage();
 

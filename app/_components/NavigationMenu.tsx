@@ -14,10 +14,12 @@ interface NavigationMenuProps {
 }
 
 /**
- * Render a responsive navigation bar with desktop links and a toggleable mobile menu.
+ * Renders a responsive navigation bar with desktop links and a toggleable mobile menu.
  *
- * @param session - Session object (or null) used to display the account area: shows the user's name and avatar when available; otherwise displays a "Guest area" link
- * @returns The navigation element containing the site links and the account area for desktop and mobile layouts
+ * Displays the account area based on `session` (user name and avatar when available; otherwise a guest-area link), includes translated navigation labels and a language toggle, and provides an accessible mobile menu that can be opened/closed.
+ *
+ * @param session - Session object or `null`; used to determine whether to show the signed-in user's name and avatar or a guest-area link
+ * @returns The navigation element containing site links, the account area, and the language toggle for both desktop and mobile layouts
  */
 function NavigationMenu({ session }: NavigationMenuProps) {
 	const [isOpen, setIsOpen] = useState(false);

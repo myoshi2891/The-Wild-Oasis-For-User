@@ -38,11 +38,12 @@ interface RootLayoutProps {
 }
 
 /**
- * Defines the root application layout and provides the reservation context to all pages.
+ * Provides the root application layout with global styling, the site chrome, and top-level context providers.
  *
- * Renders the HTML and body structure, global styling and font classes, the site Header, and a centered main container where `children` are wrapped with `ReservationProvider`.
+ * The layout applies the local font and global styles, renders the DisclaimerBanner and Header, wraps the app in LanguageProvider,
+ * and ensures `children` are scoped by ReservationProvider within the main content area.
  *
- * @returns The top-level JSX layout element containing the app chrome and the reservation-scoped children.
+ * @returns The top-level JSX element composing the HTML root, body, UI chrome, and reservation-scoped children.
  */
 export default function RootLayout({ children }: RootLayoutProps) {
 	return (

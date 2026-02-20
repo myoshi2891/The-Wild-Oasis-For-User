@@ -3,9 +3,9 @@ import HeroClient from "./_components/HeroClient";
 import bg from "@/public/bg.png";
 
 /**
- * Renders the landing page hero with a full-bleed background image, centered heading, and a CTA linking to /cabins.
+ * Renders the landing page hero with a full-bleed background image and layered hero content.
  *
- * @returns The page's JSX element containing the hero section.
+ * @returns The JSX element for the page's hero section
  */
 export default function Page() {
 	return (

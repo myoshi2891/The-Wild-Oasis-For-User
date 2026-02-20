@@ -3,6 +3,13 @@
 import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
 
+/**
+ * Render a centered hero section with a localized call-to-action link and title.
+ *
+ * The CTA label and heading text are taken from the app's language context.
+ *
+ * @returns A JSX element containing a centered hero section with a localized CTA link and heading.
+ */
 export default function HeroClient() {
 	const { t } = useLanguage();
 

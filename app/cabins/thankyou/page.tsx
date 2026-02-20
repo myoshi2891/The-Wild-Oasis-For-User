@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useLanguage } from "../../_components/LanguageContext";
 
 /**
- * Render a centered reservation confirmation with a link to manage reservations.
+ * Renders the reservation confirmation view with a localized heading and a link to manage reservations.
  *
- * @returns A JSX element containing a confirmation heading and a link to the reservations management page.
+ * @returns The JSX element containing a confirmation heading and a link to /account/reservations
  */
 export default function Page() {
 	const { t } = useLanguage();

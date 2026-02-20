@@ -11,10 +11,26 @@ type LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+/**
+ * Checks whether a value is a supported language code.
+ *
+ * @param lang - The string (or null) to test
+ * @returns `true` if `lang` is `"en"` or `"ja"` (narrows `lang` to `Language`), `false` otherwise.
+ */
 function isValidLanguage(lang: string | null): lang is Language {
   return lang === "en" || lang === "ja";
 }
 
+/**
+ * Provides language state and translations to descendant components.
+ *
+ * Reads persisted preference from localStorage on mount, initializes and persists
+ * the active language ("en" or "ja"), and keeps document.documentElement.lang in sync.
+ * During server rendering or before mount it uses "en" to avoid hydration mismatch.
+ *
+ * @param children - Elements that will receive the language context
+ * @returns A React context provider that supplies `{ language, t, toggleLanguage }` to descendants
+ */
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("en");
   const [mounted, setMounted] = useState(false);
@@ -59,6 +75,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Access the current language context for the app.
+ *
+ * @returns The context object containing `language`, `t` (translations for the current language), and `toggleLanguage`.
+ * @throws Error if the hook is called outside of a `LanguageProvider` (message: "useLanguage must be used within a LanguageProvider").
+ */
 export function useLanguage() {
   const context = useContext(LanguageContext);
   if (context === undefined) {

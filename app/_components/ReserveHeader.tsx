@@ -2,6 +2,12 @@
 
 import { useLanguage } from "./LanguageContext";
 
+/**
+ * Render a localized reservation heading, inserting the provided name into the translation.
+ *
+ * @param name - The guest or cabin name used to replace the `{name}` placeholder in the localized `reserveHeading`
+ * @returns A heading element containing the localized reservation text with `{name}` replaced by `name`
+ */
 export default function ReserveHeader({ name }: { name: string }) {
   const { t } = useLanguage();
 
