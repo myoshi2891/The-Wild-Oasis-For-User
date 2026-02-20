@@ -10,11 +10,11 @@ interface ReservationListProps {
 }
 
 /**
- * Render a list of reservation cards and handle optimistic deletion of bookings.
+ * Render a reservation list that optimistically removes bookings from the UI when deleted.
  *
- * Removes a booking from the displayed list immediately when deleted, then performs the server-side deletion via `deleteBooking`.
+ * The component displays the provided bookings and updates the list immediately on delete while performing server-side deletion.
  *
- * @param bookings - The initial array of bookings to render
+ * @param bookings - The initial array of bookings to display
  * @returns The unordered list element containing a ReservationCard for each booking
  */
 function ReservationList({ bookings }: ReservationListProps) {
@@ -25,6 +25,12 @@ function ReservationList({ bookings }: ReservationListProps) {
 		}
 	);
 
+	/**
+	 * Remove a booking from the UI optimistically and initiate server-side deletion.
+	 *
+	 * @param bookingId - The identifier of the booking to remove
+	 * @throws Any error from the server deletion request is rethrown so it can be handled by an error boundary.
+	 */
 	async function handleDelete(bookingId: number) {
 		optimisticDelete(bookingId);
 		try {

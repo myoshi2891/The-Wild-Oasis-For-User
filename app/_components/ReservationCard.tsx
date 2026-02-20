@@ -20,11 +20,11 @@ interface ReservationCardProps {
 }
 
 /**
- * Renders a reservation card for a cabin booking, showing date range and relative date, past/upcoming status, price, guest count, booking date, and edit/delete actions for upcoming bookings.
+ * Display reservation details for a cabin booking and provide edit/delete actions for upcoming bookings.
  *
- * @param booking - The booking to render (includes cabin details, dates, price, and guest count)
+ * @param booking - Booking details including cabin info, start/end dates, price, guest count, and metadata
  * @param onDelete - Callback invoked with the booking id when the reservation is deleted
- * @returns A JSX element representing the reservation card
+ * @returns The reservation card element
  */
 function ReservationCard({ booking, onDelete }: ReservationCardProps) {
 	const {

@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
 
 /**
- * Renders a styled message that prompts the user to sign in and provides a link to the login page so they can reserve a cabin.
+ * Display a localized message prompting the user to sign in with a link to /login.
  *
- * @returns A JSX element containing a centered paragraph with a link to `/login` styled for emphasis.
+ * @returns A JSX element containing a centered paragraph with localized text and a prominently styled link to `/login`.
  */
 function LoginMessage() {
 	const { t } = useLanguage();

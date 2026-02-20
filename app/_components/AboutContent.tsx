@@ -7,6 +7,12 @@ interface AboutContentProps {
   cabinsCount: number;
 }
 
+/**
+ * Renders the About page content with localized strings and a call-to-action link.
+ *
+ * @param cabinsCount - Number inserted into the localized paragraph that contains the `{count}` placeholder.
+ * @returns The rendered React element containing headings, localized paragraphs, and a link to `/cabins`.
+ */
 export default function AboutContent({ cabinsCount }: AboutContentProps) {
   const { t } = useLanguage();
 

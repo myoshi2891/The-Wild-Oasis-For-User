@@ -2,6 +2,11 @@
 
 import { useLanguage } from "./LanguageContext";
 
+/**
+ * Renders a button that toggles the application's current language via the language context.
+ *
+ * @returns The button element displaying the localized toggle label. 
+ */
 export default function LanguageToggle() {
   const { t, toggleLanguage } = useLanguage();
 

@@ -2,6 +2,11 @@
 
 import { useLanguage } from "./LanguageContext";
 
+/**
+ * Header for the cabins section that displays the localized title and description.
+ *
+ * @returns A header element containing the cabins title and description from the current language.
+ */
 export default function CabinsHeader() {
   const { t } = useLanguage();
 
