@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
 
@@ -16,11 +17,18 @@ function LoginMessage() {
 	return (
 		<div className="grid bg-primary-800">
 			<p className="self-center py-12 text-center text-xl">
-				{t.reservationForm.loginPrompt1}{" "}
-				<Link href="/login" className="text-accent-500 underline">
-					{t.reservationForm.loginPrompt2}
-				</Link>{" "}
-				{t.reservationForm.loginPrompt3}
+				{t.reservationForm.loginPrompt.split("{loginLink}").map((part, i, arr) =>
+					i < arr.length - 1 ? (
+						<Fragment key={i}>
+							{part}
+							<Link href="/login" className="text-accent-500 underline">
+								{t.reservationForm.loginLinkText}
+							</Link>
+						</Fragment>
+					) : (
+						<Fragment key={i}>{part}</Fragment>
+					)
+				)}
 			</p>
 		</div>
 	);

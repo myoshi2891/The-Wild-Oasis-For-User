@@ -49,9 +49,8 @@ export const translations = {
       startBySelecting: "Start by selecting dates",
       reserveNow: "Reserve now",
       reserving: "Reserving...",
-      loginPrompt1: "Please",
-      loginPrompt2: "login",
-      loginPrompt3: "to reserve this cabin right now"
+      loginPrompt: "Please {loginLink} to reserve this cabin right now",
+      loginLinkText: "login"
     },
     dateSelector: {
       perNight: "/night",
@@ -140,9 +139,8 @@ export const translations = {
       startBySelecting: "まずは日付を選択してください",
       reserveNow: "今すぐ予約する",
       reserving: "予約中...",
-      loginPrompt1: "このキャビンを予約するには",
-      loginPrompt2: "ログイン",
-      loginPrompt3: "してください"
+      loginPrompt: "このキャビンを予約するには{loginLink}してください",
+      loginLinkText: "ログイン"
     },
     dateSelector: {
       perNight: "/泊",

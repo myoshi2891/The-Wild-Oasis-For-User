@@ -53,13 +53,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
 				className={`${josefin.className} relative flex min-h-screen flex-col overflow-x-hidden bg-primary-950 text-primary-100 antialiased`}
 			>
 				<LanguageProvider>
-					<DisclaimerBanner />
 					<Header />
 					<div className="grid flex-1 px-4 py-12 sm:px-6 lg:px-8">
 						<main className="mx-auto w-full max-w-7xl">
 							<ReservationProvider>{children}</ReservationProvider>
 						</main>
 					</div>
+					<DisclaimerBanner />
 				</LanguageProvider>
 			</body>
 		</html>
