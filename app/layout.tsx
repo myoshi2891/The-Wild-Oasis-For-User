@@ -45,6 +45,8 @@ interface RootLayoutProps {
  * @returns The top-level JSX layout element containing the app chrome and the reservation-scoped children.
  */
 export default function RootLayout({ children }: RootLayoutProps) {
+	// TODO: Cookie ベースの言語設定に移行し、サーバー側で動的に lang を設定する。
+	// 現在は LanguageProvider がクライアントで document.documentElement.lang を更新。
 	return (
 		<html lang="en">
 			<body

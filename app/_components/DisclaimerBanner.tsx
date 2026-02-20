@@ -6,8 +6,8 @@ export default function DisclaimerBanner() {
   const { t } = useLanguage();
 
   return (
-    <div className="bg-red-800 text-white text-xs sm:text-sm text-center py-2 px-4 shadow-md w-full z-50 fixed bottom-0 left-0 sm:static">
-      <p>{t.warning?.portfolioDisclaimer || "This website is a portfolio project and is not actively operated. We do not take any responsibility for the handling of personal information or provided data."}</p>
+    <div className="sticky bottom-0 z-50 w-full bg-red-800 px-4 py-2 text-center text-xs text-white shadow-md sm:static sm:text-sm">
+      <p>{t.warning.portfolioDisclaimer}</p>
     </div>
   );
 }

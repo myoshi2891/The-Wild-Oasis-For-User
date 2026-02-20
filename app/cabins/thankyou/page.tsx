@@ -1,3 +1,5 @@
+// TODO: サーバーサイド i18n 導入後、クライアントコンポーネントを別ファイルに抽出し
+// このページを Server Component に移行する
 "use client";
 
 import Link from "next/link";
