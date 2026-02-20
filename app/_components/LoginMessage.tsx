@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useLanguage } from "./LanguageContext";
 
 /**
- * Display a localized message prompting the user to sign in with a link to /login.
+ * Render a localized sign-in prompt containing a link to /login.
  *
- * @returns A JSX element containing a centered paragraph with localized text and a prominently styled link to `/login`.
+ * The message is presented as a centered paragraph and includes a visually emphasized link.
+ *
+ * @returns A JSX element containing a centered paragraph with localized text and a styled link to `/login`
  */
 function LoginMessage() {
 	const { t } = useLanguage();
