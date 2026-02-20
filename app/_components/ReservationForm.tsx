@@ -49,6 +49,7 @@ function ReservationForm({ cabin, user }: ReservationFormProps) {
 	const clientRequestId = useMemo(() => {
 		if (!startDate || !endDate) return undefined;
 		return crypto.randomUUID();
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- .getTime() で値比較を意図的に行っている
 	}, [startDate?.getTime(), endDate?.getTime(), id]);
 
 	const bookingData: CreateBookingData = {
