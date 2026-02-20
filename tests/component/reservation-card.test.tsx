@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import ReservationCard from "../../app/_components/ReservationCard";
+import { renderWithProviders } from "../helpers/render-with-providers";
 import type { BookingWithCabin } from "@/app/_lib/data-service";
 
 vi.mock("../../app/_components/DeleteReservation", () => ({
@@ -35,7 +36,7 @@ describe("ReservationCard", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2025-01-10T12:00:00.000Z"));
 
-    render(<ReservationCard booking={baseBooking} onDelete={vi.fn()} />);
+    renderWithProviders(<ReservationCard booking={baseBooking} onDelete={vi.fn()} />);
 
     expect(screen.getByText(/past/i)).toBeInTheDocument();
     expect(screen.queryByText(/upcoming/i)).not.toBeInTheDocument();
@@ -55,7 +56,7 @@ describe("ReservationCard", () => {
       numNights: 2,
     };
 
-    render(<ReservationCard booking={upcomingBooking} onDelete={vi.fn()} />);
+    renderWithProviders(<ReservationCard booking={upcomingBooking} onDelete={vi.fn()} />);
 
     expect(screen.getByText(/upcoming/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /^edit$/i })).toBeInTheDocument();

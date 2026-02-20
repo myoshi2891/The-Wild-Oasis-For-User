@@ -2,6 +2,7 @@
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { useTransition } from "react";
 import SpinnerMini from "./SpinnerMini";
+import { useLanguage } from "./LanguageContext";
 
 interface DeleteReservationProps {
 	bookingId: number;
@@ -16,10 +17,11 @@ interface DeleteReservationProps {
  * @returns A button element that shows a trash icon and "Delete" label, or a centered spinner while deletion is pending.
  */
 function DeleteReservation({ bookingId, onDelete }: DeleteReservationProps) {
+	const { t } = useLanguage();
 	const [isPending, startTransition] = useTransition();
 
 	function handleDelete() {
-		if (confirm("Are you sure you want to delete this reservation?"))
+		if (confirm(t.reservationCard.deleteConfirm))
 			startTransition(() => onDelete(bookingId));
 	}
 
@@ -34,7 +36,7 @@ function DeleteReservation({ bookingId, onDelete }: DeleteReservationProps) {
 			{!isPending ? (
 				<>
 					<TrashIcon className="h-5 w-5 text-primary-600 transition-colors group-hover:text-primary-800" />
-					<span className="mt-1">Delete</span>
+					<span className="mt-1">{t.reservationCard.delete}</span>
 				</>
 			) : (
 				<span className="mx-auto">

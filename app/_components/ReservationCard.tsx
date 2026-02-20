@@ -1,8 +1,11 @@
+"use client";
+
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { format, formatDistance, isPast, isToday, parseISO } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import DeleteReservation from "./DeleteReservation";
+import { useLanguage } from "./LanguageContext";
 import type { BookingListItem } from "../_lib/data-service";
 
 export const formatDistanceFromNow = (dateInput: Date | string) =>
@@ -27,6 +30,7 @@ interface ReservationCardProps {
  * @returns A JSX element representing the reservation card
  */
 function ReservationCard({ booking, onDelete }: ReservationCardProps) {
+	const { t } = useLanguage();
 	const {
 		id,
 		startDate,
@@ -47,14 +51,14 @@ function ReservationCard({ booking, onDelete }: ReservationCardProps) {
 				{image ? (
 					<Image
 						src={image}
-						alt={`Cabin ${name}`}
+						alt={t.cabinDetails.cabinHeading.replace("{name}", name)}
 						fill
 						sizes="(min-width: 768px) 240px, (min-width: 640px) 208px, 100vw"
 						className="object-cover"
 					/>
 				) : (
 					<div className="flex h-full w-full items-center justify-center bg-primary-800 text-primary-400">
-						No image
+						{t.reservationCard.noImage}
 					</div>
 				)}
 			</div>
@@ -62,15 +66,17 @@ function ReservationCard({ booking, onDelete }: ReservationCardProps) {
 			<div className="flex flex-grow flex-col gap-4 px-5 py-5 sm:px-6 sm:py-6">
 				<div className="flex flex-wrap items-center gap-3 sm:gap-4">
 					<h3 className="text-lg font-semibold sm:text-xl md:text-2xl">
-						{numNights} nights in Cabin {name}
+						{t.reservationCard.nightsIn
+							.replace("{numNights}", String(numNights))
+							.replace("{name}", name)}
 					</h3>
 					{isPast(startDateValue) ? (
 						<span className="flex items-center rounded-sm bg-yellow-800 px-3 py-1 text-[11px] font-bold uppercase text-yellow-200 sm:text-xs">
-							past
+							{t.reservationCard.past}
 						</span>
 					) : (
 						<span className="flex items-center rounded-sm bg-green-800 px-3 py-1 text-[11px] font-bold uppercase text-green-200 sm:text-xs">
-							upcoming
+							{t.reservationCard.upcoming}
 						</span>
 					)}
 				</div>
@@ -78,7 +84,7 @@ function ReservationCard({ booking, onDelete }: ReservationCardProps) {
 				<p className="text-sm leading-relaxed text-primary-300 sm:text-base">
 					{format(startDateValue, "EEE, MMM dd yyyy")} (
 					{isToday(startDateValue)
-						? "Today"
+						? t.reservationCard.today
 						: formatDistanceFromNow(startDateValue)}
 					) &mdash; {format(endDateValue, "EEE, MMM dd yyyy")}
 				</p>
@@ -89,10 +95,12 @@ function ReservationCard({ booking, onDelete }: ReservationCardProps) {
 					</p>
 					<p className="text-primary-300">&bull;</p>
 					<p className="text-primary-300">
-						{numGuests} guest{numGuests > 1 && "s"}
+						{numGuests > 1
+							? t.reservationCard.guestsPlural.replace("{numGuests}", String(numGuests))
+							: t.reservationCard.guests.replace("{numGuests}", String(numGuests))}
 					</p>
 					<p className="ml-auto text-xs text-primary-400 sm:text-sm">
-						Booked {format(createdAtValue, "EEE, MMM dd yyyy, p")}
+						{t.reservationCard.booked.replace("{date}", format(createdAtValue, "EEE, MMM dd yyyy, p"))}
 					</p>
 				</div>
 			</div>
@@ -105,7 +113,7 @@ function ReservationCard({ booking, onDelete }: ReservationCardProps) {
 							className="group flex flex-1 items-center justify-center gap-2 px-4 py-3 text-[11px] font-bold uppercase text-primary-300 transition-colors hover:bg-accent-600 hover:text-primary-900 sm:justify-start sm:px-3 sm:py-4 sm:text-xs"
 						>
 							<PencilSquareIcon className="h-5 w-5 text-primary-600 transition-colors group-hover:text-primary-800" />
-							<span className="mt-1">Edit</span>
+							<span className="mt-1">{t.reservationCard.edit}</span>
 						</Link>
 						<DeleteReservation onDelete={onDelete} bookingId={id} />
 					</div>

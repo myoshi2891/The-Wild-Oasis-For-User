@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import DeleteReservation from "../../app/_components/DeleteReservation";
+import { renderWithProviders } from "../helpers/render-with-providers";
 
 vi.mock("../../app/_lib/actions", () => ({
   deleteReservation: vi.fn(),
@@ -15,7 +16,7 @@ describe("DeleteReservation", () => {
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(false);
     const onDelete = vi.fn();
 
-    render(<DeleteReservation bookingId={5} onDelete={onDelete} />);
+    renderWithProviders(<DeleteReservation bookingId={5} onDelete={onDelete} />);
 
     fireEvent.click(screen.getByRole("button", { name: /delete/i }));
 
@@ -27,7 +28,7 @@ describe("DeleteReservation", () => {
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
     const onDelete = vi.fn();
 
-    render(<DeleteReservation bookingId={7} onDelete={onDelete} />);
+    renderWithProviders(<DeleteReservation bookingId={7} onDelete={onDelete} />);
 
     fireEvent.click(screen.getByRole("button", { name: /delete/i }));
 
