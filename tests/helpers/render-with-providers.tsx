@@ -9,10 +9,11 @@ function AllProviders({ children }: { children: ReactNode }) {
 /**
  * テスト用レンダーユーティリティ。
  * LanguageProvider でラップした状態でコンポーネントをレンダリングする。
+ * async Server Component が null を返す場合に備え、null を許容する。
  */
 export function renderWithProviders(
-	ui: ReactElement,
+	ui: ReactElement | null,
 	options?: Omit<RenderOptions, "wrapper">
 ) {
-	return render(ui, { wrapper: AllProviders, ...options });
+	return render(ui ?? <></>, { wrapper: AllProviders, ...options });
 }
