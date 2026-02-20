@@ -4,6 +4,7 @@ export const translations = {
       cabins: "Cabins",
       about: "About",
       guestArea: "Guest area",
+      toggleMenuLabel: "Toggle navigation",
     },
     home: {
       title: "Welcome to paradise.",
@@ -94,6 +95,7 @@ export const translations = {
       cabins: "キャビン",
       about: "当施設について",
       guestArea: "ゲストエリア",
+      toggleMenuLabel: "ナビゲーションを切り替え",
     },
     home: {
       title: "大自然という名の、楽園へ。",

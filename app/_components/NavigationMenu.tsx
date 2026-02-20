@@ -50,7 +50,7 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 				onClick={toggleMenu}
 				className="flex items-center justify-center rounded-md border border-primary-700 p-2 text-primary-200 transition-colors hover:border-accent-400 hover:text-accent-400 md:hidden"
 				aria-expanded={isOpen}
-				aria-label="Toggle navigation"
+				aria-label={t.nav.toggleMenuLabel}
 				aria-controls="mobile-navigation-menu"
 			>
 				{isOpen ? (

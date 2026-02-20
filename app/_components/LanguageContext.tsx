@@ -40,22 +40,34 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   // 初期ロード: localStorage から保存済み言語設定を復元
   useEffect(() => {
-    const rawLang = localStorage.getItem("app-language");
-    if (isValidLanguage(rawLang)) {
-      setLanguage(rawLang);
+    try {
+      const rawLang = localStorage.getItem("app-language");
+      if (isValidLanguage(rawLang)) {
+        setLanguage(rawLang);
+      }
+    } catch {
+      // localStorage アクセス失敗時（プライベートブラウズ等）はデフォルト言語を維持
+    } finally {
+      setMounted(true);
     }
-    setMounted(true);
   }, []);
 
   // 言語変更の副作用: localStorage 保存と html lang 属性の更新
   useEffect(() => {
     if (!mounted) return;
-    localStorage.setItem("app-language", language);
+    try {
+      localStorage.setItem("app-language", language);
+    } catch {
+      // localStorage 書き込み失敗時は無視（設定は次回セッションで失われる）
+    }
     document.documentElement.lang = language;
   }, [language, mounted]);
 
   const toggleLanguage = useCallback(() => {
-    setLanguage((prevLang) => (prevLang === "en" ? "ja" : "en"));
+    setLanguage((prevLang) => {
+      const currentIndex = SUPPORTED_LANGUAGES.indexOf(prevLang);
+      return SUPPORTED_LANGUAGES[(currentIndex + 1) % SUPPORTED_LANGUAGES.length];
+    });
   }, []);
 
   // Hydration ミスマッチ防止: SSR 時はデフォルト言語を返す
