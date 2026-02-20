@@ -22,14 +22,13 @@ function isValidLanguage(lang: string | null): lang is Language {
 }
 
 /**
- * Provides language state, the current translation dictionary, and a toggle function to descendant components.
+ * Supplies language state, the active translation dictionary, and a toggle function to descendant components.
  *
- * On mount it reads the saved language from localStorage (key "app-language"), validates it, updates
- * document.documentElement.lang, and persists subsequent changes. During server rendering (and before
- * mount) the provider defaults to `"en"` to avoid hydration mismatch, then switches to the saved or selected
- * language after mounting.
+ * During server-side rendering and before the component mounts, the provider uses `"en"` to avoid hydration
+ * mismatches; on the client it restores a saved language from localStorage (key `"app-language"`), persists
+ * changes, and updates `document.documentElement.lang`.
  *
- * @returns The React context provider that supplies `{ language, t, toggleLanguage }` to descendants.
+ * @returns The context provider element that supplies `{ language, t, toggleLanguage }` to descendants.
  */
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("en");
