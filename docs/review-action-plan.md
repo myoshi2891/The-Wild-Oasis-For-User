@@ -73,11 +73,19 @@ tail -c 1 app/_lib/booking.ts | od -c
 
 **実装内容**:
 
-```javascript
+```typescript
 // app/_lib/errors.ts
 
+interface SupabaseError {
+  code?: string;
+  message?: string;
+}
+
 export class BookingError extends Error {
-  constructor(message, statusCode = 500, code = null) {
+  statusCode: number;
+  code: string | null;
+
+  constructor(message: string, statusCode: number = 500, code: string | null = null) {
     super(message);
     this.name = 'BookingError';
     this.statusCode = statusCode;
@@ -88,9 +96,10 @@ export class BookingError extends Error {
 /**
  * SupabaseエラーをBookingErrorに変換
  */
-export function mapSupabaseError(error) {
-  const code = error?.code;
-  const message = error?.message ?? '';
+export function mapSupabaseError(error: SupabaseError | unknown): BookingError {
+  const supaErr = error as SupabaseError | null;
+  const code = supaErr?.code;
+  const message = supaErr?.message ?? '';
 
   switch (code) {
     case '23P01': // exclusion violation
@@ -129,7 +138,7 @@ export function mapSupabaseError(error) {
 
 **actions.ts への適用例**:
 
-```javascript
+```typescript
 import { mapSupabaseError } from './errors';
 
 // createBooking 内
@@ -179,17 +188,17 @@ if (error) {
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          cache: npm
+          cache: bun
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: bunx playwright install --with-deps chromium
       - name: Build
         env:
           SKIP_SSG: "true"
-        run: npm run build
+        run: bun run build
       - name: Run E2E tests
-        run: npm run test:e2e
+        run: bun run test:e2e
       - name: Upload test results
         if: failure()
         uses: actions/upload-artifact@v4
