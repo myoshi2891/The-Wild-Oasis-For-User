@@ -50,7 +50,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 	return (
 		<html lang="en">
 			<body
-				className={`${josefin.className} relative flex min-h-screen flex-col overflow-x-hidden bg-primary-950 text-primary-100 antialiased`}
+				className={`${josefin.className} relative flex min-h-screen flex-col overflow-x-clip bg-primary-950 text-primary-100 antialiased`}
 			>
 				<LanguageProvider>
 					<Header />
