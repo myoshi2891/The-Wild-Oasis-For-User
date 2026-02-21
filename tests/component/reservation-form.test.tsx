@@ -1,7 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithProviders } from "../helpers/render-with-providers";
+import { translations } from "@/app/_lib/translations";
 import type { DateRange } from "react-day-picker";
 import type { Cabin } from "@/types/domain";
+
+const en = translations.en;
 
 interface ReservationState {
   range: DateRange;
@@ -60,7 +64,7 @@ async function renderForm() {
   const { default: ReservationForm } = await import(
     "../../app/_components/ReservationForm"
   );
-  return render(<ReservationForm cabin={baseCabin as Cabin} user={baseUser} />);
+  return renderWithProviders(<ReservationForm cabin={baseCabin as Cabin} user={baseUser} />);
 }
 
 describe("ReservationForm", () => {
@@ -75,9 +79,9 @@ describe("ReservationForm", () => {
   it("prompts for dates before showing the submit button", async () => {
     await renderForm();
 
-    expect(screen.getByText(/start by selecting dates/i)).toBeInTheDocument();
+    expect(screen.getByText(en.reservationForm.startBySelecting)).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: /reserve now/i })
+      screen.queryByRole("button", { name: en.reservationForm.reserveNow })
     ).not.toBeInTheDocument();
   });
 
@@ -90,7 +94,7 @@ describe("ReservationForm", () => {
     await renderForm();
 
     expect(
-      screen.getByRole("button", { name: /reserve now/i })
+      screen.getByRole("button", { name: en.reservationForm.reserveNow })
     ).toBeInTheDocument();
   });
 
@@ -102,7 +106,7 @@ describe("ReservationForm", () => {
 
     await renderForm();
 
-    const guestsSelect = screen.getByLabelText(/how many guests\?/i);
+    const guestsSelect = screen.getByLabelText(en.reservationForm.guestsLabel);
     expect(guestsSelect).toBeRequired();
 
     const options = screen.getAllByRole("option") as HTMLOptionElement[];

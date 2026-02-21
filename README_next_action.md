@@ -1,7 +1,3 @@
-Awesome—let’s wire **Codex** to your repo and get value fast (review, tests, agent-y automation, safe concurrency). I skimmed your repo and docs and tailored everything below to **MasterModernReact_NextJs** (Next 14 App Router, NextAuth v4, Supabase, Tailwind; Node `>=20` with CI on 20/22; Playwright/Vitest/@testing-library/react already in dev deps). ([GitHub][1])
-
----
-
 # 0) One-time setup (local)
 
 ```bash

@@ -1,6 +1,6 @@
 # アーキテクチャ設計
 
-> 更新履歴: 2025-12-24 初版策定
+> 更新履歴: 2025-12-24 初版策定、2026-02-20 i18n・TypeScript 移行反映
 
 ## システム概要図
 
@@ -11,6 +11,10 @@
 │  │ React       │  │ next/font   │  │ ReservationContext  │ │
 │  │ Components  │  │ (local)     │  │ (日付範囲状態)       │ │
 │  └─────────────┘  └─────────────┘  └─────────────────────┘ │
+│  ┌─────────────────────┐  ┌─────────────────────────────┐ │
+│  │ LanguageContext     │  │ DisclaimerBanner            │ │
+│  │ (言語設定状態 en/ja) │  │ (ポートフォリオ免責)         │ │
+│  └─────────────────────┘  └─────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -18,7 +22,7 @@
 │                   Next.js 14 (App Router)                    │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │                   Server Components                      ││
-│  │  - データ取得 (data-service.js)                          ││
+│  │  - データ取得 (data-service.ts)                           ││
 │  │  - ISR / SSG / Dynamic Rendering                        ││
 │  └─────────────────────────────────────────────────────────┘│
 │  ┌─────────────────────────────────────────────────────────┐│
@@ -58,34 +62,41 @@
 
 | カテゴリ | コンポーネント | 役割 |
 |---------|---------------|------|
-| Layout | Header, Navigation, Logo, SideNavigation | ナビゲーション・レイアウト |
+| Layout | Header, Navigation, Logo, SideNavigation, HeroClient | ナビゲーション・レイアウト |
 | Auth | SignInButton, SignOutButton, LoginMessage | 認証UI |
 | Cabin | CabinList, CabinCard, Cabin, Filter | キャビン表示 |
 | Reservation | Reservation, ReservationForm, ReservationCard, ReservationList | 予約UI |
 | Form | UpdateProfileForm, SelectCountry, SubmitButton, DeleteReservation | フォーム部品 |
 | UI | Spinner, SpinnerMini, TextExpander, Counter, DateSelector | 汎用UI |
+| i18n | LanguageContext, LanguageToggle, DisclaimerBanner | 多言語対応 |
 
 ### 2. ビジネスロジック層 (`app/_lib/`)
 
 ```
 app/_lib/
-├── actions.js        # Server Actions (CRUD)
+├── actions.ts        # Server Actions (CRUD)
 │   ├── createBooking()
 │   ├── updateBooking()
 │   ├── deleteBooking()
 │   └── updateGuest()
 │
-├── booking.js        # 予約バリデーション
+├── booking.ts        # 予約バリデーション
 │   ├── calculateNumNights()
 │   ├── calculateCabinPrice()
 │   ├── isDateDisabled()
 │   ├── isRangeBooked()
 │   └── validateBookingInput()
 │
-├── guest.js          # ゲストユーティリティ
+├── guest.ts          # ゲストユーティリティ
 │   └── normalizeNationalId()
 │
-└── auth.js           # NextAuth設定
+├── translations.ts   # 翻訳辞書 (en/ja)
+│   ├── nav / home / about / cabins / cabinDetails
+│   ├── cabinCard / dateSelector / loginPrompt
+│   ├── reservationForm / reservationCard / thankYou
+│   └── common / warning
+│
+└── auth.ts           # NextAuth設定
     ├── signIn callback
     ├── jwt callback
     └── session callback
@@ -95,7 +106,7 @@ app/_lib/
 
 ```
 app/_lib/
-├── data-service.js   # データ取得関数
+├── data-service.ts   # データ取得関数
 │   ├── getCabins()
 │   ├── getCabin(id)
 │   ├── getCabinPrice(id)
@@ -107,8 +118,8 @@ app/_lib/
 │   ├── getCountries()
 │   └── createGuest(newGuest)
 │
-├── supabaseServer.js # サーバー専用クライアント (RLSバイパス)
-└── supabaseBrowser.js # ブラウザ用クライアント
+├── supabaseServer.ts # サーバー専用クライアント (RLSバイパス)
+└── supabaseBrowser.ts # ブラウザ用クライアント
 ```
 
 ## データモデル
@@ -159,21 +170,21 @@ app/_lib/
 
 | パス | ファイル | レンダリング |
 |------|----------|-------------|
-| `/` | `app/page.jsx` | Static |
-| `/about` | `app/about/page.jsx` | Static |
-| `/cabins` | `app/cabins/page.jsx` | ISR (3600s) |
-| `/cabins/[cabinId]` | `app/cabins/[cabinId]/page.jsx` | SSG + Dynamic |
-| `/cabins/thankyou` | `app/cabins/thankyou/page.jsx` | Static |
-| `/login` | `app/login/page.jsx` | Static |
+| `/` | `app/page.tsx` | Static |
+| `/about` | `app/about/page.tsx` | Static |
+| `/cabins` | `app/cabins/page.tsx` | ISR (3600s) |
+| `/cabins/[cabinId]` | `app/cabins/[cabinId]/page.tsx` | SSG + Dynamic |
+| `/cabins/thankyou` | `app/cabins/thankyou/page.tsx` | Static |
+| `/login` | `app/login/page.tsx` | Static |
 
 ### 認証必須ルート (Middleware保護)
 
 | パス | ファイル | レンダリング |
 |------|----------|-------------|
-| `/account` | `app/account/page.jsx` | Dynamic |
-| `/account/profile` | `app/account/profile/page.jsx` | Dynamic |
-| `/account/reservations` | `app/account/reservations/page.jsx` | Force Dynamic |
-| `/account/reservations/edit/[bookingId]` | `app/account/reservations/edit/[bookingId]/page.jsx` | Dynamic |
+| `/account` | `app/account/page.tsx` | Dynamic |
+| `/account/profile` | `app/account/profile/page.tsx` | Dynamic |
+| `/account/reservations` | `app/account/reservations/page.tsx` | Force Dynamic |
+| `/account/reservations/edit/[bookingId]` | `app/account/reservations/edit/[bookingId]/page.tsx` | Dynamic |
 
 ## 認証フロー
 
@@ -195,21 +206,21 @@ app/_lib/
 ### ISR (Incremental Static Regeneration)
 
 ```javascript
-// app/cabins/page.jsx
+// app/cabins/page.tsx
 export const revalidate = 3600; // 1時間
 ```
 
 ### Force Dynamic
 
 ```javascript
-// app/account/reservations/page.jsx
+// app/account/reservations/page.tsx
 export const dynamic = "force-dynamic";
 ```
 
 ### SSG with generateStaticParams
 
 ```javascript
-// app/cabins/[cabinId]/page.jsx
+// app/cabins/[cabinId]/page.tsx
 export async function generateStaticParams() {
   const cabins = await getCabins();
   return cabins.map((cabin) => ({ cabinId: String(cabin.id) }));
@@ -219,7 +230,7 @@ export async function generateStaticParams() {
 ### revalidatePath (Server Actions後)
 
 ```javascript
-// actions.js
+// actions.ts
 revalidatePath("/account/reservations");
 redirect("/account/reservations");
 ```
@@ -230,12 +241,12 @@ redirect("/account/reservations");
 
 ```
 app/
-├── error.jsx          # グローバルエラーバウンダリ
-├── not-found.jsx      # 404ページ
-├── loading.jsx        # グローバルローディング
+├── error.tsx          # グローバルエラーバウンダリ
+├── not-found.tsx      # 404ページ
+├── loading.tsx        # グローバルローディング
 └── cabins/
     └── [cabinId]/
-        └── not-found.jsx  # キャビン個別404
+        └── not-found.tsx  # キャビン個別404
 ```
 
 ### Server Actions
@@ -254,7 +265,7 @@ try {
 ### 認可チェック
 
 ```javascript
-// actions.js での guestId 検証
+// actions.ts での guestId 検証
 const session = await auth();
 if (!session?.user?.guestId) {
   throw new Error("認証が必要です");
@@ -270,7 +281,7 @@ if (booking.guestId !== session.user.guestId) {
 ### 入力検証
 
 ```javascript
-// booking.js
+// booking.ts
 export function validateBookingInput({
   startDate,
   endDate,

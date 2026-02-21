@@ -6,6 +6,9 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import type { Session } from "next-auth";
 
+import { useLanguage } from "./LanguageContext";
+import LanguageToggle from "./LanguageToggle";
+
 interface NavigationMenuProps {
 	session: Session | null;
 }
@@ -18,6 +21,7 @@ interface NavigationMenuProps {
  */
 function NavigationMenu({ session }: NavigationMenuProps) {
 	const [isOpen, setIsOpen] = useState(false);
+	const { t } = useLanguage();
 
 	const toggleMenu = () => setIsOpen((prev) => !prev);
 	const closeMenu = () => setIsOpen(false);
@@ -35,8 +39,8 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 	}, [isOpen]);
 
 	const links = [
-		{ href: "/cabins", label: "Cabins" },
-		{ href: "/about", label: "About" },
+		{ href: "/cabins", label: t.nav.cabins },
+		{ href: "/about", label: t.nav.about },
 	];
 
 	return (
@@ -46,7 +50,7 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 				onClick={toggleMenu}
 				className="flex items-center justify-center rounded-md border border-primary-700 p-2 text-primary-200 transition-colors hover:border-accent-400 hover:text-accent-400 md:hidden"
 				aria-expanded={isOpen}
-				aria-label="Toggle navigation"
+				aria-label={t.nav.toggleMenuLabel}
 				aria-controls="mobile-navigation-menu"
 			>
 				{isOpen ? (
@@ -57,7 +61,7 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 			</button>
 
 			<nav className="hidden md:block">
-				<ul className="flex items-center gap-2 text-lg">
+				<ul className="flex items-center gap-4 text-lg">
 					{links.map((link) => (
 						<li key={link.href}>
 							<Link
@@ -92,9 +96,12 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 								className="transition-colors hover:text-accent-400"
 								onClick={closeMenu}
 							>
-								Guest area
+								{t.nav.guestArea}
 							</Link>
 						)}
+					</li>
+					<li>
+						<LanguageToggle />
 					</li>
 				</ul>
 			</nav>
@@ -102,7 +109,7 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 			{isOpen ? (
 				<div
 					id="mobile-navigation-menu"
-					className="absolute left-0 top-12 z-20 w-72 rounded-md border border-primary-800 bg-primary-950 p-2 opacity-80 shadow-lg md:hidden"
+					className="animate-slide-down absolute left-0 top-12 z-20 w-72 rounded-md border border-primary-800 bg-primary-950 p-2 opacity-80 shadow-lg md:hidden"
 				>
 					<nav>
 						<ul className="flex flex-col items-center gap-3 text-base">
@@ -126,10 +133,10 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 								) : (
 									<Link
 										href="/account"
-										className="rounded-md px-2 py-2 transition-colors hover:bg-primary-800 hover:text-accent-400"
+										className="block rounded-md px-2 py-2 transition-colors hover:bg-primary-800 hover:text-accent-400"
 										onClick={closeMenu}
 									>
-										Guest area
+										{t.nav.guestArea}
 									</Link>
 								)}
 							</li>
@@ -145,6 +152,9 @@ function NavigationMenu({ session }: NavigationMenuProps) {
 									</Link>
 								</li>
 							))}
+							<li className="mt-2 border-t border-primary-800 pt-2 w-full flex justify-center">
+								<LanguageToggle />
+							</li>
 						</ul>
 					</nav>
 				</div>

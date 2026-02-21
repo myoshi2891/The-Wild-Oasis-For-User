@@ -6,9 +6,11 @@
 
 **The Wild Oasis** は、キャビン宿泊予約システムです。
 - フレームワーク: Next.js 14 (App Router)
+- 言語: TypeScript (strict モード)
 - データベース: Supabase (PostgreSQL)
 - 認証: NextAuth.js 4.x (Google OAuth)
 - スタイリング: Tailwind CSS
+- 多言語: 日英2言語対応 (クライアントサイド Context)
 
 ## クイックスタート
 
@@ -33,16 +35,18 @@ bun run build
 
 ```
 app/
-├── _components/          # 共通コンポーネント (27個)
+├── _components/          # 共通コンポーネント (34個)
 ├── _lib/                 # ユーティリティ・データサービス
-│   ├── actions.js        # Server Actions (CRUD操作)
-│   ├── auth.js           # NextAuth設定
-│   ├── booking.js        # 予約バリデーション
-│   ├── data-service.js   # Supabaseデータ取得
-│   ├── errors.js         # エラーマッピング (SQLSTATE → HTTP)
-│   ├── guest.js          # ゲストユーティリティ
-│   ├── supabaseServer.js # サーバー専用クライアント
-│   └── supabaseBrowser.js # ブラウザ用クライアント
+│   ├── actions.ts        # Server Actions (CRUD操作)
+│   ├── auth.ts           # NextAuth設定
+│   ├── booking.ts        # 予約バリデーション
+│   ├── data-service.ts   # Supabaseデータ取得
+│   ├── errors.ts         # エラーマッピング (SQLSTATE → HTTP)
+│   ├── guest.ts          # ゲストユーティリティ
+│   ├── logger.ts         # 構造化ログ (StructuredLogger)
+│   ├── translations.ts   # 翻訳辞書 (en/ja)
+│   ├── supabaseServer.ts # サーバー専用クライアント
+│   └── supabaseBrowser.ts # ブラウザ用クライアント
 ├── _styles/              # グローバルCSS
 ├── about/                # アバウトページ
 ├── account/              # 認証必須エリア
@@ -76,15 +80,23 @@ app/
 - JWT セッション戦略
 - Middleware による保護 (`/account/*`)
 
+### 4. 多言語対応 (i18n)
+- 日本語・英語の2言語対応
+- `LanguageContext` によるクライアントサイド言語管理
+- `localStorage` による言語設定の永続化
+- 翻訳辞書: `app/_lib/translations.ts`
+- 言語切替: `app/_components/LanguageToggle.tsx`
+
 ## 重要なコード規約
 
 ### データ取得
-- サーバーコンポーネント: `data-service.js` の関数を使用
-- ミューテーション: `actions.js` の Server Actions を使用
+- サーバーコンポーネント: `data-service.ts` の関数を使用
+- ミューテーション: `actions.ts` の Server Actions を使用
 - ブラウザから直接Supabaseを呼ばない
 
 ### Supabaseクライアント
-```javascript
+
+```typescript
 // サーバー側 (RLSバイパス)
 import supabaseServer from "@/app/_lib/supabaseServer";
 
@@ -94,6 +106,7 @@ import supabaseBrowser from "@/app/_lib/supabaseBrowser";
 
 ### 状態管理
 - `ReservationContext` で日付範囲を管理
+- `LanguageContext` で言語設定を管理（en/ja、localStorage 永続化）
 - Redux/Zustand は未使用
 
 ## テスト構成
@@ -103,6 +116,8 @@ import supabaseBrowser from "@/app/_lib/supabaseBrowser";
 | Unit | `tests/unit/` | Node |
 | Component | `tests/component/` | jsdom |
 | E2E | `tests/e2e/` | Playwright |
+
+- Component テストは `renderWithProviders()` で `LanguageProvider` をラップ（`tests/helpers/render-with-providers.tsx`）
 
 ## CI構成
 
@@ -138,6 +153,14 @@ NEXTAUTH_URL=
 NEXTAUTH_SECRET=
 ```
 
+## Claude Code メモリ階層
+
+| レイヤー | ファイル | 変更頻度 | 内容 |
+|---------|---------|---------|------|
+| グローバル静的 | `~/.claude/CLAUDE.md` | ほぼ不変 | エンジニアリング原則、コード規約 |
+| プロジェクト | `CLAUDE.md`（リポジトリルート） | 低頻度 | アーキテクチャ、ビルドコマンド、規約 |
+| セッション | `.claude/settings.local.json` | 必要時 | プロジェクト固有の権限設定 |
+
 ## 関連ドキュメント
 
 ### メモリバンク (Kilo Code / Spec Kit)
@@ -166,7 +189,7 @@ NEXTAUTH_SECRET=
 # Lint
 bun run lint
 
-# 型チェック (TypeScript移行後)
+# 型チェック
 bun run typecheck
 
 # Supabaseローカル
@@ -183,3 +206,4 @@ docker compose down
 - `SKIP_SSG=true` はビルド時のみ使用 (テスト時は不要)
 - 予約操作は認証必須、`guestId` の検証を忘れずに
 - 外部画像は `next.config.mjs` の `remotePatterns` で許可
+- i18n はクライアント Context 依存: 翻訳対象コンポーネントは `"use client"` 必須

@@ -3,14 +3,14 @@
 この文書はチーム合意で更新する「プロジェクト憲法」です。
 品質基準と非機能要件を明確にし、判断に迷ったときの拠り所にします。
 
-> 更新履歴: 2025-12-24 初版策定
+> 更新履歴: 2025-12-24 初版策定、2026-02-20 i18n・TS・Bun 移行完了反映
 
 ## 品質基準
 
 ### コード品質
 - ESLint: `eslint-config-next` の標準ルールに準拠
 - Prettier: 未導入 (将来的に検討)
-- TypeScript: 段階的移行予定 (`typescript-migration-plan.md` 参照)
+- TypeScript: strict モード有効（Phase 6 移行完了）
 
 ### テスト基準
 - ユニットテスト: `tests/unit/` - ビジネスロジックをカバー
@@ -33,8 +33,8 @@
 
 ### 可用性
 - ヘルスチェック: `/api/health` エンドポイント
-- エラーバウンダリ: `app/error.jsx` で全体キャッチ
-- Not Found: `app/not-found.jsx` でカスタム404
+- エラーバウンダリ: `app/error.tsx` で全体キャッチ
+- Not Found: `app/not-found.tsx` でカスタム404
 
 ### アクセシビリティ
 - ボタン: `type` 属性を明示
@@ -42,7 +42,7 @@
 - 画像: `alt` 属性必須
 
 ### 観測性
-- ログ: `console.error` でエラー記録 (将来的に構造化ログ検討)
+- ログ: `StructuredLogger` による構造化ログ（`app/_lib/logger.ts`）
 - Supabase: エラー時にスローして上位で処理
 
 ## セキュリティ
@@ -82,11 +82,12 @@
 - ゲストプロフィール管理
 - Google OAuth 認証
 - レスポンシブUI
+- 多言語対応（クライアントサイド日英2言語）
 
 ### Out-of-scope
 - 管理者ダッシュボード (別システム想定)
 - 決済機能 (isPaid フラグのみ)
-- 多言語対応
+- サーバーサイド i18n（next-intl 等への移行）
 - プッシュ通知
 
 ## CI/SSG 実装詳細
@@ -99,7 +100,7 @@
 - name: Build
   env:
     SKIP_SSG: "true"
-  run: npm run build
+  run: bun run build
 ```
 
 **スコープ**:
@@ -112,7 +113,7 @@
 ### パラメータガードの実装例
 
 ```javascript
-// app/cabins/[cabinId]/page.jsx
+// app/cabins/[cabinId]/page.tsx
 export async function generateStaticParams() {
   if (process.env.SKIP_SSG === "true") {
     return []; // ビルド時は空配列
@@ -133,7 +134,7 @@ export async function generateStaticParams() {
 
 **CIでの実行**:
 ```bash
-npm run start -- --hostname 127.0.0.1 --port 3000 > server.log 2>&1 &
+bun run start -- --hostname 127.0.0.1 --port 3000 > server.log 2>&1 &
 ```
 
 | 項目 | 値 |
@@ -152,7 +153,7 @@ npm run start -- --hostname 127.0.0.1 --port 3000 > server.log 2>&1 &
 ### 既存パイプラインとの関係
 
 ```
-Checkout → npm ci → Lint → Unit Tests → Component Tests → Build (SKIP_SSG) → Smoke Test
+Checkout → bun install → Lint → Unit Tests → Component Tests → Build (SKIP_SSG) → Smoke Test
 ```
 
 - **追加的**: 既存の Lint/Test ステップに Smoke Test を追加
@@ -160,7 +161,8 @@ Checkout → npm ci → Lint → Unit Tests → Component Tests → Build (SKIP_
 
 ## 技術的負債
 
-- [ ] TypeScript 移行 (`typescript-migration-plan.md`)
-- [ ] npm → Bun 移行 (`npm-to-bun-migration-plan.md`)
-- [ ] 構造化ログの導入
+- [x] TypeScript 移行 → 完了（Phase 6、2025-12-31）
+- [x] npm → Bun 移行 → 完了（2026-01-01）
+- [x] 構造化ログの導入 → 完了（2026-01-01）
+- [ ] サーバーサイド i18n 移行（`"use client"` 依存の解消）
 - [ ] Prettier 導入

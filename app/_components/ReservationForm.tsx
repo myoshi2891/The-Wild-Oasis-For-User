@@ -6,6 +6,7 @@ import { useReservation } from "./ReservationContext";
 import { createBooking, type CreateBookingData } from "../_lib/actions";
 import SubmitButton from "./SubmitButton";
 import Image from "next/image";
+import { useLanguage } from "./LanguageContext";
 
 interface CabinData {
 	maxCapacity: number;
@@ -23,13 +24,19 @@ interface ReservationFormProps {
 }
 
 /**
- * Render a reservation form that displays the logged-in user and collects guest count and observations for booking a cabin.
+ * Render a reservation form that displays the logged-in user and collects guest count and observations to create a cabin booking.
  *
- * The component prepares booking metadata (startDate and endDate as null when absent, calculated `numNights`, and `cabinId`) and binds it to the server action that handles form submissions. When the form is submitted successfully the selected date range is reset; if submission fails the date range is preserved.
+ * The form action awaits `createBookingWithData` (a Server Action bound with booking metadata)
+ * and then calls `resetRange` to clear the selected dates. If the Server Action throws, the error
+ * propagates to the nearest Error Boundary and `resetRange` is not called, preserving the user's
+ * date selection.
  *
- * @returns A JSX element containing the reservation form UI.
+ * @returns A JSX element containing the reservation form UI
  */
+// TODO: useActionState + useFormStatus でクライアント側エラーフィードバックを表示し、
+// Error Boundary 遷移を回避する。
 function ReservationForm({ cabin, user }: ReservationFormProps) {
+	const { t } = useLanguage();
 	const { range, resetRange } = useReservation();
 	const { maxCapacity, id } = cabin;
 	const userImage = user.image;
@@ -47,6 +54,7 @@ function ReservationForm({ cabin, user }: ReservationFormProps) {
 	const clientRequestId = useMemo(() => {
 		if (!startDate || !endDate) return undefined;
 		return crypto.randomUUID();
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- .getTime() で値比較を意図的に行っている
 	}, [startDate?.getTime(), endDate?.getTime(), id]);
 
 	const bookingData: CreateBookingData = {
@@ -62,7 +70,7 @@ function ReservationForm({ cabin, user }: ReservationFormProps) {
 	return (
 		<div className="flex h-full flex-col">
 			<div className="flex flex-col gap-2 bg-primary-800 px-4 py-4 text-xs text-primary-300 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:text-sm">
-				<p className="uppercase tracking-wide text-primary-200">Logged in as</p>
+				<p className="uppercase tracking-wide text-primary-200">{t.reservationForm.loggedInAs}</p>
 
 				<div className="flex items-center gap-3">
 					{userImage ? (
@@ -85,13 +93,8 @@ function ReservationForm({ cabin, user }: ReservationFormProps) {
 
 			<form
 				action={async (formData) => {
-					try {
-						await createBookingWithData(formData);
-						resetRange();
-					} catch (error) {
-						// エラー時は日付選択を保持（Server Actionはエラーを再スローするのでUIに伝播）
-						throw error;
-					}
+					await createBookingWithData(formData);
+					resetRange();
 				}}
 				className="flex flex-1 flex-col gap-5 bg-primary-900 px-4 py-6 text-sm sm:gap-6 sm:px-8 sm:py-8 sm:text-base md:gap-7 md:px-10 md:py-10"
 			>
@@ -100,7 +103,7 @@ function ReservationForm({ cabin, user }: ReservationFormProps) {
 						htmlFor="numGuests"
 						className="text-xs uppercase tracking-wide text-primary-200 sm:text-sm"
 					>
-						How many guests?
+						{t.reservationForm.guestsLabel}
 					</label>
 					<select
 						name="numGuests"
@@ -109,11 +112,11 @@ function ReservationForm({ cabin, user }: ReservationFormProps) {
 						required
 					>
 						<option value="" key="">
-							Select guests...
+							{t.reservationForm.selectGuests}
 						</option>
 						{Array.from({ length: maxCapacity }, (_, i) => i + 1).map((x) => (
 							<option value={x} key={x}>
-								{x} {x === 1 ? "guest" : "guests"}
+								{x} {x === 1 ? t.reservationForm.guestSingle : t.reservationForm.guestPlural}
 							</option>
 						))}
 					</select>
@@ -124,27 +127,27 @@ function ReservationForm({ cabin, user }: ReservationFormProps) {
 						htmlFor="observations"
 						className="text-xs uppercase tracking-wide text-primary-200 sm:text-sm"
 					>
-						Anything we should know about your stay?
+						{t.reservationForm.observationsLabel}
 					</label>
 					<textarea
 						name="observations"
 						id="observations"
 						className="h-28 w-full rounded-sm bg-primary-200 px-4 py-3 text-sm text-primary-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-accent-400 sm:h-32 sm:text-base"
-						placeholder="Any pets, allergies, special requirements, etc.?"
+						placeholder={t.reservationForm.observationsPlaceholder}
 					/>
 				</div>
 
 				<div className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:justify-end sm:gap-6">
 					{!(startDate && endDate) ? (
 						<p className="text-xs text-primary-300 sm:text-sm">
-							Start by selecting dates
+							{t.reservationForm.startBySelecting}
 						</p>
 					) : (
 						<SubmitButton
-							pendingLabel="Reserving..."
+							pendingLabel={t.reservationForm.reserving}
 							className="w-full text-sm sm:w-auto sm:text-base"
 						>
-							Reserve now
+							{t.reservationForm.reserveNow}
 						</SubmitButton>
 					)}{" "}
 				</div>

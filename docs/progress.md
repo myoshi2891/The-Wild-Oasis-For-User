@@ -5,6 +5,22 @@ Status: 未確認 / 確認中 / 完了 / 差し戻し
 
 | Status | Commit | Date | Summary | Notes |
 | --- | --- | --- | --- | --- |
+| 完了 | 17bfd0e | 2026-02-20 | fix(test): accept null from async Server Components in renderWithProviders | CabinList null 戻り値の型対応 |
+| 完了 | 174720c | 2026-02-20 | chore: resolve merge conflict in LanguageContext.tsx | docstrings ブランチとのマージ |
+| 完了 | 3ad8ba0 | 2026-02-20 | chore: code quality cleanup and minor fixes | no-op try/catch 除去、sticky banner 等 |
+| 完了 | 9c306d6 | 2026-02-20 | refactor(i18n): purify LanguageContext state updater and derive validation | toggleLanguage 純粋化、SUPPORTED_LANGUAGES 導出 |
+| 完了 | 91ff9aa | 2026-02-20 | fix(a11y): heading DOM order, localized aria-label, motion-safe, nav spacing | flex-col-reverse、motion-safe: プレフィックス |
+| 完了 | 46b5716 | 2026-02-20 | fix(i18n): translate ReservationCard and DeleteReservation hardcoded strings | 予約カード・削除ボタン翻訳 |
+| 完了 | 627fcf6 | 2026-02-20 | fix(i18n): add translation keys and fix bold rendering in Cabin | マーカーパターンで太字処理 |
+| 完了 | 3c86948 | 2026-02-20 | fix(css): move stagger into @layer, fix spinner reduced-motion, add 11+ fallback | CSS カスケード修正 |
+| 完了 | 58e12be | 2026-02-20 | fix(test): add LanguageProvider wrapper for component tests | renderWithProviders ユーティリティ |
+| 完了 | deeda9f | 2026-02-20 | Merge pull request #104 from coderabbitai/docstrings | JSDoc 自動追加 |
+| 完了 | 7e7edf3 | 2026-02-20 | chore: include recent style adjustments and screenshots | スタイル調整 |
+| 完了 | 6dac1d5 | 2026-02-20 | refactor: address i18n code review feedback and optimize performance | 初回レビュー対応 |
+| 完了 | 22cc732 | 2026-02-20 | feat(i18n): Translate cabin descriptions and reservation flows to Japanese | キャビン説明・予約フロー翻訳 |
+| 完了 | 40587dc | 2026-02-20 | feat(i18n): invert home page layout and add global portfolio disclaimer banner | ホームレイアウト反転、免責バナー |
+| 完了 | 8206d42 | 2026-02-20 | feat(i18n): implement Japanese translation feature | i18n 基盤実装 |
+| 完了 | 0421bd6 | 2026-02-20 | feat(ui): add entrance animations and hover effects to components | アニメーション・ホバー効果追加 |
 | 完了 | e529093 | 2026-01-03 | refactor(db): optimize capacity check trigger with UPDATE OF clause | トリガー最適化、境界テスト追加 |
 | 完了 | 632db2f | 2026-01-03 | feat(db): add capacity check trigger for bookings | キャパシティチェックトリガー実装 |
 | 完了 | c141e82 | 2026-01-02 | fix: use lazy HASH_SALT validation for Next.js build compatibility | ビルド時エラー修正 |
@@ -73,6 +89,27 @@ Status: 未確認 / 確認中 / 完了 / 差し戻し
 ## 作業ログ（統合）
 
 このセクションに `docs/README_20251018.md` と `docs/2025-10-13-postgres-maintenance.md` の内容を統合して管理する。
+
+### 2026-02-20 i18n 機能追加・レビュー対応
+
+#### 概要
+
+クライアントサイド日英翻訳機能を実装し、コードレビューで指摘された問題を修正。
+
+#### 主要変更
+
+- **i18n 基盤**: `LanguageContext` + `translations.ts` による2言語対応
+- **翻訳カバレッジ**: nav, home, about, cabins, cabinDetails, cabinCard, dateSelector, loginPrompt, reservationForm, reservationCard, thankYou, common, warning
+- **テスト基盤**: `renderWithProviders()` ユーティリティで `LanguageProvider` をテスト時に自動ラップ
+- **CSS 修正**: スタッガーアニメーションを `@layer components` へ移動、`prefers-reduced-motion` でスピナー例外追加
+- **a11y 改善**: `flex-col-reverse` で見出し DOM 順序修正、`motion-safe:` プレフィックス、ローカライズ済み `aria-label`
+- **コード品質**: `toggleLanguage` 純粋化（副作用を `useEffect` に分離）、`SUPPORTED_LANGUAGES` を `translations` から導出、no-op try/catch 除去
+
+#### アーキテクチャ上の制約
+
+- i18n はクライアント Context 依存 → 翻訳対象コンポーネントは `"use client"` 必須
+- Server Component（`reservations/page.tsx` 等）は翻訳スコープ外
+- 将来サーバーサイド i18n（next-intl 等）移行時に解消予定
 
 ### 2026-01-02 変更内容まとめ（詳細）
 

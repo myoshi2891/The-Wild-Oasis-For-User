@@ -45,19 +45,19 @@ WHERE b1.status <> 'canceled'
 
 ---
 
-### 1.2 booking.js 末尾改行追加
+### 1.2 booking.ts 末尾改行追加
 
-**対象ファイル**: `app/_lib/booking.js`
+**対象ファイル**: `app/_lib/booking.ts`
 
 **作業内容**:
 ```bash
 # 末尾に改行を追加
-echo "" >> app/_lib/booking.js
+echo "" >> app/_lib/booking.ts
 ```
 
 **確認コマンド**:
 ```bash
-tail -c 1 app/_lib/booking.js | od -c
+tail -c 1 app/_lib/booking.ts | od -c
 # 期待値: 0000000  \n
 ```
 
@@ -67,17 +67,25 @@ tail -c 1 app/_lib/booking.js | od -c
 
 ### 2.1 SQLSTATEからHTTPへのマッピング実装
 
-**対象ファイル**: `app/_lib/actions.js`
+**対象ファイル**: `app/_lib/actions.ts`
 
-**新規作成ファイル**: `app/_lib/errors.js`
+**新規作成ファイル**: `app/_lib/errors.ts`
 
 **実装内容**:
 
-```javascript
-// app/_lib/errors.js
+```typescript
+// app/_lib/errors.ts
+
+interface SupabaseError {
+  code?: string;
+  message?: string;
+}
 
 export class BookingError extends Error {
-  constructor(message, statusCode = 500, code = null) {
+  statusCode: number;
+  code: string | null;
+
+  constructor(message: string, statusCode: number = 500, code: string | null = null) {
     super(message);
     this.name = 'BookingError';
     this.statusCode = statusCode;
@@ -88,9 +96,10 @@ export class BookingError extends Error {
 /**
  * SupabaseエラーをBookingErrorに変換
  */
-export function mapSupabaseError(error) {
-  const code = error?.code;
-  const message = error?.message ?? '';
+export function mapSupabaseError(error: SupabaseError | unknown): BookingError {
+  const supaErr = error as SupabaseError | null;
+  const code = supaErr?.code;
+  const message = supaErr?.message ?? '';
 
   switch (code) {
     case '23P01': // exclusion violation
@@ -127,9 +136,9 @@ export function mapSupabaseError(error) {
 }
 ```
 
-**actions.js への適用例**:
+**actions.ts への適用例**:
 
-```javascript
+```typescript
 import { mapSupabaseError } from './errors';
 
 // createBooking 内
@@ -143,7 +152,7 @@ if (error) {
 
 ### 2.2 SignOutButton の実装確認
 
-**確認対象**: `app/_components/SignOutButton.jsx`
+**確認対象**: `app/_components/SignOutButton.tsx`
 
 **確認ポイント**:
 - `next-auth/react` の `signOut` を使用しているか
@@ -179,17 +188,17 @@ if (error) {
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          cache: npm
+          cache: bun
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: bunx playwright install --with-deps chromium
       - name: Build
         env:
           SKIP_SSG: "true"
-        run: npm run build
+        run: bun run build
       - name: Run E2E tests
-        run: npm run test:e2e
+        run: bun run test:e2e
       - name: Upload test results
         if: failure()
         uses: actions/upload-artifact@v4
@@ -279,7 +288,7 @@ supabase db push
 
 ### 5.1 nationalId 正規化の仕様明文化
 
-**対象ファイル**: `app/_lib/guest.js` のJSDocを拡充
+**対象ファイル**: `app/_lib/guest.ts` のJSDocを拡充
 
 ```javascript
 /**
@@ -294,7 +303,7 @@ supabase db push
  */
 ```
 
-### 5.2 data-service.js の cache フォールバックにコメント追加
+### 5.2 data-service.ts の cache フォールバックにコメント追加
 
 ```javascript
 /**
@@ -328,39 +337,39 @@ const cacheFn = typeof cache === "function" ? cache : (fn) => fn;
 
 | Phase | 期間 | 担当 | 状態 |
 |-------|------|------|------|
-| 1.1 DB調査・判断 | Day 1 | Tech Lead | ⬜ |
-| 1.2 booking.js 改行 | Day 1 | Any | ⬜ |
-| 2.1 エラーマッピング | Day 2-4 | Backend | ⬜ |
-| 2.2 SignOutButton確認 | Day 2 | Frontend | ⬜ |
-| 3.1 CI E2E追加 | Day 5-6 | DevOps | ⬜ |
-| 4.x DB制約実装 | Day 7-12 | Backend/DBA | ⬜ |
-| 5.x ドキュメント | Day 13-14 | Any | ⬜ |
+| 1.1 DB調査・判断 | Day 1 | Tech Lead | ✅ |
+| 1.2 booking.ts 改行 | Day 1 | Any | ✅ |
+| 2.1 エラーマッピング | Day 2-4 | Backend | ✅ |
+| 2.2 SignOutButton確認 | Day 2 | Frontend | ✅ |
+| 3.1 CI E2E追加 | Day 5-6 | DevOps | ✅ |
+| 4.x DB制約実装 | Day 7-12 | Backend/DBA | ✅ |
+| 5.x ドキュメント | Day 13-14 | Any | ✅ |
 
 ---
 
 ## チェックリスト
 
 ### Phase 1 完了条件
-- [ ] DB型・status実値を確認した
-- [ ] 既存データに重複がないことを確認した
-- [ ] Option A/B の判断を下した
-- [ ] booking.js の末尾改行を追加した
+- [x] DB型・status実値を確認した
+- [x] 既存データに重複がないことを確認した
+- [x] Option A/B の判断を下した（Option A: DB制約実装を選択）
+- [x] booking.ts の末尾改行を追加した
 
 ### Phase 2 完了条件
-- [ ] `app/_lib/errors.js` を作成した
-- [ ] actions.js でエラーマッピングを使用している
-- [ ] SignOutButton が正しく動作する
+- [x] `app/_lib/errors.ts` を作成した
+- [x] actions.ts でエラーマッピングを使用している
+- [x] SignOutButton が正しく動作する
 
 ### Phase 3 完了条件
-- [ ] CI で E2E テストが実行される
-- [ ] テスト失敗時にレポートがアップロードされる
+- [x] CI で E2E テストが実行される
+- [x] テスト失敗時にレポートがアップロードされる
 
-### Phase 4 完了条件（Option A選択時）
-- [ ] マイグレーションファイルが作成された
-- [ ] ローカルで制約違反テストが通る
-- [ ] ステージング環境でデプロイ確認
-- [ ] 本番適用
+### Phase 4 完了条件（Option A選択）
+- [x] マイグレーションファイルが作成された
+- [x] ローカルで制約違反テストが通る
+- [x] ステージング環境でデプロイ確認
+- [x] 本番適用
 
 ### Phase 5 完了条件
-- [x] guest.js のJSDocが拡充された
-- [x] data-service.js のコメントが追加された
+- [x] guest.ts のJSDocが拡充された
+- [x] data-service.ts のコメントが追加された

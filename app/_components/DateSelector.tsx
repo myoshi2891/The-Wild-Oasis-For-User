@@ -11,6 +11,7 @@ import { DayPicker, type DateRange as DayPickerDateRange } from "react-day-picke
 import "react-day-picker/dist/style.css";
 import { useReservation } from "./ReservationContext";
 import type { Settings, Cabin } from "@/types/domain";
+import { useLanguage } from "./LanguageContext";
 
 interface DateSelectorProps {
 	settings: Settings;
@@ -31,6 +32,7 @@ interface CustomCSSProperties extends CSSProperties {
  * @returns A JSX element that displays the date-range selector and a live per-night and total price summary.
  */
 function DateSelector({ settings, cabin, bookedDates }: DateSelectorProps) {
+	const { t } = useLanguage();
 	const { range, setRange, resetRange } = useReservation();
 
 	const isBooked = isRangeBooked(range, bookedDates);
@@ -134,7 +136,7 @@ function DateSelector({ settings, cabin, bookedDates }: DateSelectorProps) {
 						) : (
 							<span className="text-lg sm:text-2xl">${regularPrice}</span>
 						)}
-						<span>/night</span>
+						<span>{t.dateSelector.perNight}</span>
 					</p>
 					{numNights ? (
 						<>
@@ -142,7 +144,7 @@ function DateSelector({ settings, cabin, bookedDates }: DateSelectorProps) {
 								<span>&times;</span> <span>{numNights}</span>
 							</p>
 							<p className="text-sm sm:text-lg">
-								<span className="font-bold uppercase">Total</span>{" "}
+								<span className="font-bold uppercase">{t.dateSelector.total}</span>{" "}
 								<span className="text-lg font-semibold sm:text-2xl">
 									${cabinPrice}
 								</span>
@@ -161,7 +163,7 @@ function DateSelector({ settings, cabin, bookedDates }: DateSelectorProps) {
 						}`}
 						onClick={resetRange}
 					>
-						Clear
+						{t.dateSelector.clear}
 					</button>
 				) : null}
 			</div>

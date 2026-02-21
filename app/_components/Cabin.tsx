@@ -1,3 +1,5 @@
+"use client";
+
 import TextExpander from "@/app/_components/TextExpander";
 import {
 	EyeSlashIcon,
@@ -5,6 +7,7 @@ import {
 	UsersIcon,
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import { useLanguage } from "./LanguageContext";
 
 interface CabinData {
 	name: string;
@@ -24,9 +27,11 @@ interface CabinProps {
  * @returns The JSX markup for a cabin card populated with the given data.
  */
 function Cabin({ cabin }: CabinProps) {
+	const { t } = useLanguage();
 	const { name, maxCapacity, image, description } = cabin;
 	const imageSrc = image ?? "/placeholder-cabin.png";
-	const descriptionText = description ?? "";
+	const translatedDesc = t.cabinDescriptions?.[name as keyof typeof t.cabinDescriptions];
+	const descriptionText = translatedDesc ?? description ?? "";
 
 	return (
 		<div className="mx-auto mb-24 grid w-full max-w-3xl gap-10 rounded-lg border border-primary-800 px-4 py-6 sm:px-6 lg:max-w-6xl lg:grid-cols-[3fr_2fr] lg:items-center lg:gap-16 lg:px-12 lg:py-10">
@@ -36,7 +41,7 @@ function Cabin({ cabin }: CabinProps) {
 					fill
 					sizes="(min-width: 1024px) 45vw, (min-width: 640px) 70vw, 100vw"
 					className="object-cover"
-					alt={`Cabin ${name}`}
+					alt={t.cabinDetails.cabinHeading.replace("{name}", name)}
 					loading="eager"
 					fetchPriority="high"
 				/>
@@ -44,7 +49,7 @@ function Cabin({ cabin }: CabinProps) {
 
 			<div className="z-10 lg:pl-10">
 				<h3 className="mb-5 bg-primary-950 px-4 py-2 text-4xl font-black text-accent-100 sm:text-5xl md:text-6xl lg:-translate-x-8 lg:px-6 lg:pb-1 lg:text-7xl xl:translate-x-0">
-					Cabin {name}
+					{t.cabinDetails.cabinHeading.replace("{name}", name)}
 				</h3>
 
 				<p className="mb-8 text-base text-primary-300 sm:text-lg md:mb-10">
@@ -55,20 +60,23 @@ function Cabin({ cabin }: CabinProps) {
 					<li className="flex items-center gap-3">
 						<UsersIcon className="h-5 w-5 text-primary-600" />
 						<span className="text-lg">
-							For up to <span className="font-bold">{maxCapacity}</span> guests
+							{t.cabinDetails.capacity.replace("{maxCapacity}", maxCapacity.toString())}
 						</span>
 					</li>
 					<li className="flex items-center gap-3">
 						<MapPinIcon className="h-5 w-5 text-primary-600" />
 						<span className="text-lg">
-							Located in the heart of the{" "}
-							<span className="font-bold">Dolomites</span> (Italy)
+							{t.cabinDetails.location.split('**').map((part, i) =>
+								i % 2 === 1 ? <span key={i} className="font-bold">{part}</span> : <span key={i}>{part}</span>
+							)}
 						</span>
 					</li>
 					<li className="flex items-center gap-3">
 						<EyeSlashIcon className="h-5 w-5 text-primary-600" />
 						<span className="text-lg">
-							Privacy <span className="font-bold">100%</span> guaranteed
+							{t.cabinDetails.privacy.split('**').map((part, i) =>
+								i % 2 === 1 ? <span key={i} className="font-bold">{part}</span> : <span key={i}>{part}</span>
+							)}
 						</span>
 					</li>
 				</ul>

@@ -11,6 +11,10 @@ beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => {
   server.resetHandlers();
   cleanup();
+  // LanguageProvider の localStorage リークを防止（node 環境ではスキップ）
+  if (typeof localStorage !== "undefined") {
+    localStorage.clear();
+  }
 });
 afterAll(() => server.close());
 
