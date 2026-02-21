@@ -8,9 +8,13 @@ import Image from "next/image";
 import Link from "next/link";
 import DeleteReservation from "./DeleteReservation";
 import { useLanguage } from "./LanguageContext";
+import type { Language } from "../_lib/translations";
 import type { BookingListItem } from "../_lib/data-service";
 
-const dateFnsLocales: Record<string, Locale> = { en: enUS, ja };
+const dateFnsLocales: Record<Language, Locale> = { en: enUS, ja };
+
+// locale 対応: 英語 "about " と日本語 "約" の近似接頭辞を除去
+const APPROX_PREFIX = /^(?:about |約)/;
 
 export const formatDistanceFromNow = (dateInput: Date | string, locale?: Locale) =>
 	formatDistance(
@@ -20,7 +24,7 @@ export const formatDistanceFromNow = (dateInput: Date | string, locale?: Locale)
 			addSuffix: true,
 			locale,
 		}
-	).replace("about ", "");
+	).replace(APPROX_PREFIX, "");
 
 interface ReservationCardProps {
 	booking: BookingListItem;
@@ -36,7 +40,7 @@ interface ReservationCardProps {
  */
 function ReservationCard({ booking, onDelete }: ReservationCardProps) {
 	const { t, language } = useLanguage();
-	const dateLocale = dateFnsLocales[language];
+	const dateLocale = dateFnsLocales[language] ?? enUS;
 	const {
 		id,
 		startDate,
