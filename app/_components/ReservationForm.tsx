@@ -26,10 +26,15 @@ interface ReservationFormProps {
 /**
  * Render a reservation form that displays the logged-in user and collects guest count and observations to create a cabin booking.
  *
- * The component prepares booking metadata (start/end dates or `null`, calculated nights, cabin id, and a clientRequestId for idempotency) and submits it with the form. On successful submission the selected date range is reset; if submission fails the date range is preserved.
+ * The form action awaits `createBookingWithData` (a Server Action bound with booking metadata)
+ * and then calls `resetRange` to clear the selected dates. If the Server Action throws, the error
+ * propagates to the nearest Error Boundary and `resetRange` is not called, preserving the user's
+ * date selection.
  *
  * @returns A JSX element containing the reservation form UI
  */
+// TODO: useActionState + useFormStatus でクライアント側エラーフィードバックを表示し、
+// Error Boundary 遷移を回避する。
 function ReservationForm({ cabin, user }: ReservationFormProps) {
 	const { t } = useLanguage();
 	const { range, resetRange } = useReservation();

@@ -45,16 +45,19 @@ function CabinCard({ cabin }: CabinCardProps) {
 						<div className="flex items-center gap-2">
 							<UsersIcon className="h-5 w-5 shrink-0 text-primary-600" />
 							<p className="whitespace-nowrap text-sm sm:text-base">
-								{t.cabinDetails.capacity.split("{maxCapacity}").map((part, i, arr) =>
-									i < arr.length - 1 ? (
-										<span key={i}>
-											{part}
-											<span className="font-semibold">{maxCapacity}</span>
-										</span>
-									) : (
-										<span key={i}>{part}</span>
-									),
-								)}
+								{t.cabinDetails.capacity.includes("{maxCapacity}")
+									? t.cabinDetails.capacity.split("{maxCapacity}").map((part, i, arr) =>
+										i < arr.length - 1 ? (
+											<span key={i}>
+												{part}
+												<span className="font-semibold">{maxCapacity}</span>
+											</span>
+										) : (
+											<span key={i}>{part}</span>
+										),
+									)
+									: <>{t.cabinDetails.capacity} <span className="font-semibold">{maxCapacity}</span></>
+								}
 							</p>
 						</div>
 
