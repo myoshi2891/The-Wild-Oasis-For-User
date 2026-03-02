@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { createGuest, getGuest, DatabaseError } from "./data-service";
 import { logger } from "./logger";
+import { authConfig } from "./auth.config";
 import type { Guest } from "@/types/domain";
 
 /**
@@ -30,6 +31,7 @@ async function getOrCreateGuestByEmail(
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+	...authConfig,
 	providers: [
 		Google({
 			clientId: process.env.AUTH_GOOGLE_ID,
@@ -40,14 +42,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 	session: { strategy: "jwt" },
 
 	callbacks: {
-		// ミドルウェアでの認証チェック
-		authorized({ auth, request: { nextUrl } }) {
-			const isLoggedIn = !!auth?.user;
-			const isOnAccount = nextUrl.pathname.startsWith("/account");
-			if (isOnAccount && !isLoggedIn) return false; // → signIn ページへ
-			return true;
-		},
-
+		...authConfig.callbacks,
 		// ① サインイン時：ここでは認証のみ
 		async signIn() {
 			return true;
@@ -88,6 +83,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			return session;
 		},
 	},
-
-	pages: { signIn: "/login" },
 });
