@@ -56,14 +56,14 @@ The Wild Oasisは、ゲストが高級キャビンを閲覧し、空室状況を
 
 | カテゴリ | 技術 | バージョン | 目的 |
 |---------|------|-----------|------|
-| フレームワーク | next | 14.2.35 | App Router、Server Components、ISR |
-| UIライブラリ | react | ^18 | SSRサポート付きコンポーネントベースUI |
-| 認証 | next-auth | 4.24.13 | OAuth統合とセッション管理 |
+| フレームワーク | next | ^15.5.10 | App Router、Server Components、ISR |
+| UIライブラリ | react | ^19 | SSRサポート付きコンポーネントベースUI |
+| 認証 | next-auth | 5.0.0-beta.30 | OAuth統合とセッション管理 (Auth.js v5) |
 | データベース | @supabase/supabase-js | ^2.56.0 | リアルタイム機能付きPostgreSQLデータベース |
 | スタイリング | tailwindcss | ^3.4.1 | ユーティリティファーストCSSフレームワーク |
 | アイコン | @heroicons/react | ^2.1.5 | Reactアイコンライブラリ |
 | 日付処理 | date-fns | ^3.6.0 | 日付操作ユーティリティ |
-| 日付ピッカー | react-day-picker | ^8.10.1 | カレンダーUIコンポーネント |
+| 日付ピッカー | react-day-picker | ^9.14.0 | カレンダーUIコンポーネント |
 
 ### 開発依存関係
 
@@ -81,7 +81,7 @@ The Wild Oasisは、ゲストが高級キャビンを閲覧し、空室状況を
 
 ## アーキテクチャ概要
 
-The Wild OasisはNext.js 14 App Routerアーキテクチャに従い、サーバーサイドレンダリングと選択的なクライアントサイドインタラクティビティを採用しています。
+The Wild OasisはNext.js 15 App Routerアーキテクチャに従い、サーバーサイドレンダリングと選択的なクライアントサイドインタラクティビティを採用しています。
 
 ### システムアーキテクチャとコードエンティティ
 
@@ -96,7 +96,7 @@ graph TB
         Pages[ページ<br/>app/cabins/page.js<br/>app/account/page.js]
         Layouts[レイアウト<br/>app/layout.js<br/>app/account/layout.js]
         ServerComponents[サーバーコンポーネント<br/>CabinList.js<br/>Cabin.js]
-        Middleware[middleware.js<br/>認証保護]
+        Middleware["middleware.js<br/>認証保護 (Edgeランタイム)<br/>app/_lib/auth.config.js"]
     end
     
     subgraph "サーバーアクション層"
@@ -346,11 +346,11 @@ the-wild-oasis-website/
 - **目的**: ユーザー認証とプロフィールデータ取得
 - **フロー**: `SignInButton.js`/`SignOutButton.js`のクライアント呼び出しで管理
 
-#### NextAuth 4
+#### Auth.js (NextAuth 5 beta)
 
-- **設定**: `app/_lib/auth.js`で定義
-- **セッション管理**: ルート保護のため`middleware.js`の`withAuth`ミドルウェア
-- **コールバック**: ユーザーとセッション処理用のカスタムコールバック
+- **設定**: `app/_lib/auth.ts` および `app/_lib/auth.config.ts` (Vercel Edge対応用) で定義
+- **セッション管理**: ルート保護のため `middleware.ts` が `authConfig` の `authorized` コールバックを使用
+- **コールバック**: ユーザーとセッション処理用のカスタムコールバック (`jwt`, `session`)
 
 #### restcountries.com API
 
@@ -434,9 +434,9 @@ sequenceDiagram
     participant LP as app/login/page.js
     participant UI as SignInButton.js
     participant NA as next-auth/react
-    participant Auth as auth.js<br/>NextAuth
+    participant Auth as auth.ts (Auth.js)
     participant Google as Google OAuth
-    participant MW as middleware.js
+    participant MW as middleware.ts (auth.config)
     participant DS as data-service.js
     participant SB as Supabase
     
@@ -485,7 +485,7 @@ sequenceDiagram
 
 ## パフォーマンス最適化
 
-アプリケーションは複数のNext.js 14パフォーマンス戦略を実装しています：
+アプリケーションは複数のNext.js 15パフォーマンス戦略を実装しています：
 
 ### レンダリング戦略概要
 
@@ -580,11 +580,11 @@ NEXT_PUBLIC_SUPABASE_KEY=
 SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
 
-# NextAuth (Google OAuth)
+# Auth.js (Google OAuth)
 AUTH_GOOGLE_ID=
 AUTH_GOOGLE_SECRET=
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=
+AUTH_URL=http://localhost:3000
+AUTH_SECRET=
 
 # Optional
 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000
@@ -597,11 +597,11 @@ TZ=Asia/Tokyo
 
 ## まとめ
 
-The Wild Oasisは、包括的なキャビン予約体験を提供する最新のNext.js 14アプリケーションです。主要なアーキテクチャの決定事項：
+The Wild Oasisは、包括的なキャビン予約体験を提供する最新のNext.js 15アプリケーションです。主要なアーキテクチャの決定事項：
 
 - **Next.js App Router**: 最適なパフォーマンスのためにサーバーコンポーネントを活用
 - **Supabase統合**: リアルタイム機能付きPostgreSQLデータベース
-- **NextAuth 4**: Google OAuthによる安全な認証
+- **Auth.js (NextAuth 5)**: Google OAuthによる安全な認証とVercel Edgeランタイム最適化
 - **サーバーアクション**: 自動キャッシュ無効化を伴う型安全なミューテーション
 - **Context API**: 予約フローのクライアントサイド状態管理
 - **Tailwind CSS**: 迅速な開発のためのユーティリティファーストスタイリング
