@@ -12,9 +12,9 @@ declare namespace NodeJS {
     AUTH_GOOGLE_ID: string;
     /** Google OAuth client secret (required - only auth provider) */
     AUTH_GOOGLE_SECRET: string;
-    /** NextAuth canonical URL */
-    NEXTAUTH_URL: string;
-    /** NextAuth secret for JWT encryption */
-    NEXTAUTH_SECRET: string;
+    /** Auth.js canonical URL */
+    AUTH_URL?: string;
+    /** Auth.js secret for JWT encryption */
+    AUTH_SECRET: string;
   }
 }
