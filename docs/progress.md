@@ -5,7 +5,7 @@ Status: 未確認 / 確認中 / 完了 / 差し戻し
 
 | Status | Commit | Date | Summary | Notes |
 | --- | --- | --- | --- | --- |
-| 完了 | TODO | 2026-03-03 | feat: upgrade to Next.js 15, React 19, and Auth.js v5 | セキュリティアップデート・アーキテクチャ刷新 |
+| 完了 | 51c8c74 | 2026-03-02 | feat: upgrade to Next.js 15, React 19, and Auth.js v5 | セキュリティアップデート・アーキテクチャ刷新 |
 | 完了 | 17bfd0e | 2026-02-20 | fix(test): accept null from async Server Components in renderWithProviders | CabinList null 戻り値の型対応 |
 | 完了 | 174720c | 2026-02-20 | chore: resolve merge conflict in LanguageContext.tsx | docstrings ブランチとのマージ |
 | 完了 | 3ad8ba0 | 2026-02-20 | chore: code quality cleanup and minor fixes | no-op try/catch 除去、sticky banner 等 |
@@ -91,7 +91,7 @@ Status: 未確認 / 確認中 / 完了 / 差し戻し
 
 このセクションに `docs/README_20251018.md` と `docs/2025-10-13-postgres-maintenance.md` の内容を統合して管理する。
 
-### 2026-03-03 Next.js 15 メジャーアップグレード
+### 2026-03-02 Next.js 15 メジャーアップグレード
 
 #### 概要
 

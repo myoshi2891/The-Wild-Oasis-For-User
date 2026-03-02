@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { createGuest, getGuest, DatabaseError } from "./data-service";
@@ -60,10 +61,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 					token.guestId = guest?.id ?? null; // 失敗してもnullを格納しておく
 				}
 			} catch (error) {
+				const errorEmail = token?.email ?? user?.email;
+				const hashedEmail = errorEmail ? crypto.createHash('sha256').update(errorEmail).digest('hex') : "unknown";
 				logger.error({
 					event: "GUEST_LOOKUP_FAILED",
 					message: "Guest lookup failed in getOrCreateGuestByEmail",
-					email: token?.email ?? user?.email,
+					hashedEmail,
 					trigger,
 					error: error instanceof Error ? error.message : String(error)
 				});

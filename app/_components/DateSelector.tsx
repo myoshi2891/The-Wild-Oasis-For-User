@@ -53,7 +53,7 @@ function DateSelector({ settings, cabin, bookedDates }: DateSelectorProps) {
 	const { minBookingLength, maxBookingLength } = settings;
 	const [monthsToShow, setMonthsToShow] = useState(2);
 	const isSingleMonth = monthsToShow === 1;
-	const DAY_CELL_SIZE = isSingleMonth ? "clamp(1.65rem, 9vw, 2.1rem)" : "2.4rem";
+	const dayCellSize = isSingleMonth ? "clamp(1.65rem, 9vw, 2.1rem)" : "2.4rem";
 
 	const handleSelect: OnSelectHandler<DayPickerDateRange | undefined> = useCallback(
 		(newRange) => {
@@ -107,8 +107,8 @@ function DateSelector({ settings, cabin, bookedDates }: DateSelectorProps) {
 				numberOfMonths={monthsToShow}
 				style={
 					{
-						"--rdp-day-width": DAY_CELL_SIZE,
-						"--rdp-day-height": DAY_CELL_SIZE,
+						"--rdp-day-width": dayCellSize,
+						"--rdp-day-height": dayCellSize,
 					} as CustomCSSProperties
 				}
 				disabled={(curDate) => isDateDisabled(curDate, bookedDates)}

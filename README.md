@@ -96,7 +96,7 @@ graph TB
         Pages[ページ<br/>app/cabins/page.js<br/>app/account/page.js]
         Layouts[レイアウト<br/>app/layout.js<br/>app/account/layout.js]
         ServerComponents[サーバーコンポーネント<br/>CabinList.js<br/>Cabin.js]
-        Middleware["middleware.js<br/>認証保護 (Edgeランタイム)<br/>app/_lib/auth.config.js"]
+        Middleware["middleware.ts<br/>認証保護 (Edgeランタイム)<br/>app/_lib/auth.config.ts"]
     end
     
     subgraph "サーバーアクション層"
