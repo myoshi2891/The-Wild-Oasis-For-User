@@ -2,12 +2,6 @@
 	"name": "the-wild-oasis-website",
 	"version": "0.2.0",
 	"private": true,
-	"overrides": {
-		"glob": "10.5.0"
-	},
-	"engines": {
-		"node": ">=20"
-	},
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
@@ -19,28 +13,28 @@
 		"test:unit": "vitest run tests/unit",
 		"test:component": "vitest run tests/component",
 		"test:e2e": "playwright test",
-		"test:all": "npm run test:unit && npm run test:component && npm run test:e2e",
+		"test:all": "bun run test:unit && bun run test:component && bun run test:e2e",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@heroicons/react": "^2.1.5",
 		"@supabase/supabase-js": "^2.56.0",
 		"date-fns": "^3.6.0",
-		"next": "14.2.35",
-		"next-auth": "4.24.13",
-		"react": "^18",
-		"react-day-picker": "^8.10.1",
-		"react-dom": "^18"
+		"next": "^15.5.10",
+		"next-auth": "5.0.0-beta.30",
+		"react": "^19",
+		"react-day-picker": "^9.14.0",
+		"react-dom": "^19"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.55.1",
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/react": "^16.3.0",
 		"@types/node": "^20.19.27",
-		"@types/react": "18.3.27",
-		"@types/react-dom": "^18.3.7",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
 		"eslint": "^8.57.0",
-		"eslint-config-next": "14.2.5",
+		"eslint-config-next": "^15.5.10",
 		"jsdom": "^26.1.0",
 		"msw": "^2.11.3",
 		"postcss": "^8",

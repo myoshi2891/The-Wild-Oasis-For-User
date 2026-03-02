@@ -21,10 +21,7 @@ function SignInButton() {
 		setErrorMessage("");
 
 		try {
-			const result = await signIn("google", { callbackUrl: "/account" });
-			if (result?.error) {
-				setErrorMessage("Sign-in failed. Please try again.");
-			}
+			await signIn("google", { callbackUrl: "/account" });
 		} catch {
 			setErrorMessage("Sign-in failed. Please try again.");
 		} finally {

@@ -5,6 +5,7 @@ Status: 未確認 / 確認中 / 完了 / 差し戻し
 
 | Status | Commit | Date | Summary | Notes |
 | --- | --- | --- | --- | --- |
+| 完了 | 51c8c74 | 2026-03-02 | feat: upgrade to Next.js 15, React 19, and Auth.js v5 | セキュリティアップデート・アーキテクチャ刷新 |
 | 完了 | 17bfd0e | 2026-02-20 | fix(test): accept null from async Server Components in renderWithProviders | CabinList null 戻り値の型対応 |
 | 完了 | 174720c | 2026-02-20 | chore: resolve merge conflict in LanguageContext.tsx | docstrings ブランチとのマージ |
 | 完了 | 3ad8ba0 | 2026-02-20 | chore: code quality cleanup and minor fixes | no-op try/catch 除去、sticky banner 等 |
@@ -89,6 +90,26 @@ Status: 未確認 / 確認中 / 完了 / 差し戻し
 ## 作業ログ（統合）
 
 このセクションに `docs/README_20251018.md` と `docs/2025-10-13-postgres-maintenance.md` の内容を統合して管理する。
+
+### 2026-03-02 Next.js 15 メジャーアップグレード
+
+#### 概要
+
+重大なセキュリティ脆弱性（CVE-2026-23864 および Image Optimizer DoS）への対応として、基盤となるフレームワークのメジャーアップグレードを実施。
+
+#### 主要変更
+
+- **Next.js 15 & React 19 への移行**: `next` (^15.5.10), `react` & `react-dom` (^19) へアップデート。型定義も追従。
+- **Auth.js v5 への移行**: `next-auth` を v4 から v5 (5.0.0-beta.30) へ。Vercel Edge Runtime との互換性を確保するため、認証設定を `auth.ts`（Node用）と `auth.config.ts`（Edge用）に分割。
+- **react-day-picker v9 への移行**: 最新版へのメジャーアップデートに伴い、`DateSelector.tsx` の内部実装と型（`OnSelectHandler` 等）を刷新。
+- **CSS変数の定数化**: `DAY_CELL_SIZE` を抽出し、カレンダーセルのインラインスタイル重複を解消。
+
+#### アーキテクチャ上の改善
+
+- `middleware.ts` が Edge ランタイム専用の軽量な `auth.config.ts` のみを読み込むようにリファクタリング（Node.js 専用 API を分離）。
+- `package.json` に残っていた Vercel 内部ビルドと干渉する Node 20 強制設定や `glob` アップグレードの上書き指定（`overrides`）を削除し、Vercel 側でのネイティブ処理に委譲。
+
+---
 
 ### 2026-02-20 i18n 機能追加・レビュー対応
 

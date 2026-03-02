@@ -308,7 +308,7 @@ supabase db push
 ```javascript
 /**
  * React 18.2以前またはテスト環境でcacheが未定義の場合のフォールバック
- * 本番環境(Next.js 14+)では常にReactのcacheが使用される
+ * 本番環境(Next.js 14/15+)では常にReactのcacheが使用される
  */
 const cacheFn = typeof cache === "function" ? cache : (fn) => fn;
 ```

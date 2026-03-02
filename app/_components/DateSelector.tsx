@@ -7,8 +7,8 @@ import {
 	isRangeBooked,
 } from "@/app/_lib/booking";
 import { useCallback, useEffect, useState, type CSSProperties } from "react";
-import { DayPicker, type DateRange as DayPickerDateRange } from "react-day-picker";
-import "react-day-picker/dist/style.css";
+import { DayPicker, type DateRange as DayPickerDateRange, type OnSelectHandler } from "react-day-picker";
+import "react-day-picker/style.css";
 import { useReservation } from "./ReservationContext";
 import type { Settings, Cabin } from "@/types/domain";
 import { useLanguage } from "./LanguageContext";
@@ -20,7 +20,8 @@ interface DateSelectorProps {
 }
 
 interface CustomCSSProperties extends CSSProperties {
-	"--rdp-cell-size"?: string;
+	"--rdp-day-width"?: string;
+	"--rdp-day-height"?: string;
 }
 
 /**
@@ -52,9 +53,10 @@ function DateSelector({ settings, cabin, bookedDates }: DateSelectorProps) {
 	const { minBookingLength, maxBookingLength } = settings;
 	const [monthsToShow, setMonthsToShow] = useState(2);
 	const isSingleMonth = monthsToShow === 1;
+	const dayCellSize = isSingleMonth ? "clamp(1.65rem, 9vw, 2.1rem)" : "2.4rem";
 
-	const handleSelect = useCallback(
-		(newRange: DayPickerDateRange | undefined) => {
+	const handleSelect: OnSelectHandler<DayPickerDateRange | undefined> = useCallback(
+		(newRange) => {
 			setRange(newRange ?? { from: undefined, to: undefined });
 		},
 		[setRange]
@@ -91,9 +93,7 @@ function DateSelector({ settings, cabin, bookedDates }: DateSelectorProps) {
 		>
 			<DayPicker
 				className={`w-full self-center pt-6 transition-all sm:pt-10 ${
-					isSingleMonth
-						? "max-w-[min(17.25rem,_100%)] [&_.rdp-caption_dropdowns]:flex [&_.rdp-caption_dropdowns]:flex-col [&_.rdp-caption_dropdowns]:items-stretch [&_.rdp-caption_dropdowns]:gap-1.5 [&_.rdp-caption]:w-full [&_.rdp-dropdown]:w-full [&_.rdp-dropdown]:text-xs [&_.rdp-head_cell]:text-[0.65rem] [&_.rdp-head_cell]:tracking-wide sm:[&_.rdp-caption_dropdowns]:flex-row sm:[&_.rdp-caption_dropdowns]:items-center sm:[&_.rdp-caption_dropdowns]:justify-center sm:[&_.rdp-dropdown]:w-auto sm:[&_.rdp-dropdown]:text-sm"
-						: "max-w-3xl"
+					isSingleMonth ? "max-w-[min(17.25rem,_100%)]" : "max-w-3xl"
 				}`}
 				mode="range"
 				onSelect={handleSelect}
@@ -107,9 +107,8 @@ function DateSelector({ settings, cabin, bookedDates }: DateSelectorProps) {
 				numberOfMonths={monthsToShow}
 				style={
 					{
-						"--rdp-cell-size": isSingleMonth
-							? "clamp(1.65rem, 9vw, 2.1rem)"
-							: "2.4rem",
+						"--rdp-day-width": dayCellSize,
+						"--rdp-day-height": dayCellSize,
 					} as CustomCSSProperties
 				}
 				disabled={(curDate) => isDateDisabled(curDate, bookedDates)}
