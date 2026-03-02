@@ -7,7 +7,7 @@ import {
 	isRangeBooked,
 } from "@/app/_lib/booking";
 import { useCallback, useEffect, useState, type CSSProperties } from "react";
-import { DayPicker, type DateRange as DayPickerDateRange } from "react-day-picker";
+import { DayPicker, type DateRange as DayPickerDateRange, type OnSelectHandler } from "react-day-picker";
 import "react-day-picker/style.css";
 import { useReservation } from "./ReservationContext";
 import type { Settings, Cabin } from "@/types/domain";
@@ -54,12 +54,12 @@ function DateSelector({ settings, cabin, bookedDates }: DateSelectorProps) {
 	const [monthsToShow, setMonthsToShow] = useState(2);
 	const isSingleMonth = monthsToShow === 1;
 
-	const handleSelect = useCallback(
-		(newRange: DayPickerDateRange | undefined) => {
+	const handleSelect: OnSelectHandler<DayPickerDateRange | undefined> = useCallback(
+		(newRange) => {
 			setRange(newRange ?? { from: undefined, to: undefined });
 		},
 		[setRange]
-	) as (range: DayPickerDateRange | undefined, triggerDate: Date, modifiers: Record<string, boolean>, e: React.MouseEvent | React.KeyboardEvent) => void;
+	);
 
 	useEffect(() => {
 		const mediaQuery = window.matchMedia("(max-width: 768px)");

@@ -1,8 +1,7 @@
-
-
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { createGuest, getGuest, DatabaseError } from "./data-service";
+import { logger } from "./logger";
 import type { Guest } from "@/types/domain";
 
 /**
@@ -65,11 +64,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 					const guest = await getOrCreateGuestByEmail(email, name);
 					token.guestId = guest?.id ?? null; // 失敗してもnullを格納しておく
 				}
-			} catch {
-				console.warn(
-					"[auth][jwt] guest lookup failed, keep token without guestId"
-				);
-				// guestIdが未設定の場合はundefinedのまま維持（明示的に何もしない）
+			} catch (error) {
+				logger.error({
+					event: "GUEST_LOOKUP_FAILED",
+					message: "Guest lookup failed in getOrCreateGuestByEmail",
+					email: token?.email ?? user?.email,
+					trigger,
+					error: error instanceof Error ? error.message : String(error)
+				});
+				throw error; // Fail-fast: do not silently continue leaving token.guestId undefined
 			}
 			return token;
 		},
