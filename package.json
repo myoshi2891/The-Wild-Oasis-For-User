@@ -19,7 +19,7 @@
 		"test:unit": "vitest run tests/unit",
 		"test:component": "vitest run tests/component",
 		"test:e2e": "playwright test",
-		"test:all": "npm run test:unit && npm run test:component && npm run test:e2e",
+		"test:all": "bun run test:unit && bun run test:component && bun run test:e2e",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
